@@ -1,4 +1,4 @@
-#Chasm - landslide prediction gui, preventing disasters one slope at a time!
+#summary Chasm is landslide prediction application, helping keep houses in place one slope at a time!
 
 = Chasm - a Random Hacks of Kindness project =
 
