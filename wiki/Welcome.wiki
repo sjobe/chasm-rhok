@@ -1,12 +1,6 @@
 #summary Chasm is landslide prediction application, helping keep houses in place one slope at a time!
 
-= Chasm - a Random Hacks of Kindness project =
-
-   more to follow.
+= Chasm =
+   A [http://www.rhok.org Random Hacks of Kindness] project. 
 
 = Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
