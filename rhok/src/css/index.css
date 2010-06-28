@@ -1,0 +1,253 @@
+body, html, div, span,
+ul, li, ol, a, img, object, embed,
+p, h1, h2, h3, h4, h5, h6, strong, em, blockquote {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-family:verdana;
+}
+
+body { 
+  background: #fff;  
+}
+
+#page {
+  width: 1000px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 10px;
+}
+
+#logo {
+  height: 50px;
+  width: 126px;
+  background-image: url(../img/logo.png);
+}
+
+.callout {
+  color: #F26522;
+  font-size:0.8em;
+}
+
+#main-col, #graph-col {
+  height: 560px;
+  /*background: #394;*/
+}
+
+#main-col {
+  width: 506px;
+  float: left;
+}
+
+#graph-col {
+  float: right;
+}
+
+#graph {
+  margin-top:42px;
+  width:100%;
+  background-color:#e5e5e5;
+}
+
+.button {
+  color:#fff;
+  text-decoration:none;
+  font-weight:bold;
+  text-align:center;
+  font-size:0.8em;
+  line-height:30px;
+  -moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+  -moz-border-radius: 5px 5px;
+  -webkit-border-radius: 5px 5px;
+  border: 1px solid #000;
+  background-image: url(../img/gradient_d.png);
+}
+
+#compute-button:hover {
+  background-image: url(../img/gradient_l.png);
+  color: #000;
+}
+
+#compute-button {
+  display:block;
+  margin-top:25px;
+  font-size:1.3em;
+  line-height:50px;
+  cursor:pointer;
+  width:100%;
+  height:50px;
+}
+
+#tabs {
+  background-image: url(../img/gradient_l.png);
+  background-repeat:repeat-x;
+  -moz-border-radius: 5px 5px 0px 0px; 
+  -webkit-border-radius: 5px 5px 0px 0px;
+  border-bottom:1px solid #6D6E71;
+  border: 1px solid #777;
+
+}
+
+#tabs a {
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+  font-weight:bold;
+  font-size:0.8em;
+  display: block;
+  line-height:40px;
+  text-align:center;
+  width:100px;
+  float: left;
+  border-right: 1px solid #6D6E71;
+  color: #414042;
+  text-decoration: none;
+  outline: none;
+}
+
+#tabs a.last {
+  border-right: 0px solid #000;  
+  -moz-border-radius: 0px 5px 0px 0px; 
+  -webkit-border-radius: 0px 5px 0px 0px;
+}
+
+#tabs a.first {
+  -moz-border-radius: 5px 0px 0px 0px; 
+  -webkit-border-radius: 5px 0px 0px 0px;
+}
+
+#tabs a.selected {
+  background-image: url(../img/gradient_i.png);
+  background-repeat:repeat-x;
+  color: #fff;
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.25);
+}
+
+#tabs a:hover {
+  background-image: url(../img/gradient_i.png);
+  background-repeat:repeat-x;
+  color: #fff;
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.25);
+}
+
+#tab-pages .tab-page {
+  display: none;  
+}
+
+#tab-pages .selected {
+  display: block;  
+}
+
+.tab-page {
+  padding:10px;
+  height:514px;
+  overflow-y:auto;
+  border-right: 1px solid #777;
+  border-left: 1px solid #777;
+  border-bottom: 1px solid #777;
+  -moz-border-radius: 0px 0px 5px 5px; 
+  -webkit-border-radius: 0px 0px 5px 5px;
+}
+
+#prev-next {
+  border-top:1px solid #6D6E71;
+  border: 1px solid #777;
+  background-image: url(../img/gradient_l.png);
+  background-repeat:repeat-x;
+  -moz-border-radius: 0px 0px 5px 5px; 
+  -webkit-border-radius: 0px 0px 5px 5px;
+    height:50px;
+}
+
+#prev-next a {
+  margin:10px;
+  height:30px;
+  width: 50px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:bold;
+  text-align:center;
+  font-size:0.8em;
+  line-height:30px;
+  -moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+  -moz-border-radius: 5px 5px;
+  -webkit-border-radius: 5px 5px;
+  border: 1px solid #000;
+  background-image: url(../img/gradient_d.png);
+}
+#prev-next a:hover {
+  background-image: url(../img/gradient_l.png);
+}
+
+/*tables*/
+
+th {
+  text-align:left;
+  font-size:0.8em;
+}
+
+.table-title{
+  padding:10px 0px;
+}
+
+.info input[type=text] {
+  margin:10px;
+}
+
+.soil-table {
+  width:400px;
+  margin-top:10px;
+}
+
+.soil-table input {
+  width:50px;
+}
+
+.profile input {
+  width:80px;
+  margin-right:50px
+}
+
+.add-profile-segment {
+  padding:5px 10px;
+}
+
+.delete-segment a{
+  text-decoration:none;
+  font-weight:bold;
+  color:#fff;
+  font-size:0.8em;
+  background-color:#999;
+  padding: 0px 4px;
+  -moz-border-radius: 2px; 
+  -webkit-border-radius: 2px;
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+  -webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+.soil-table select {
+  width:55px;
+}
+
+.rain input {
+  width:50px;
+}
+
+.rain th {
+  padding-right:40px;
+}
+
+#prev {
+  float:left;
+
+}
+
+#next {
+  float:right;
+}
+
+
+.clear {
+  clear: both;
+}
