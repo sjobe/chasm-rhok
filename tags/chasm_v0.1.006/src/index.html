@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" media="screen" href="css/index.css" />
+<link rel="stylesheet" type="text/css" href="css/jsxgraph.css" />
+<script type="text/javascript" src="lib/jsxgraphcore.js"></script>
+<script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="lib/index.js"></script>
+<script type="text/javascript" src="lib/translate.js"></script>
+<script type="text/javascript" src="lib/chasmArrayUtils.js"></script>
+<script type="text/javascript" src="lib/soilGrade.js"></script>
+<script type="text/javascript" src="lib/raintable.js"></script>
+<title>rhok - CHASM Web UI</title>
+</head>
+<body>
+  <div id="page">
+    <div id="logo"></div>
+    <div id="main-col">
+      <div id="tabs">
+        <a href="#" class="selected first" id="info">Info</a>
+        <a href="#" id="profile">Profile</a>
+        <a href="#" id="soil">Soil</a>
+        <a href="#" id="water">Water</a>
+        <a href="#" id="rain" class="last">Rain</a>
+        <div class="clear"></div>
+      </div>
+      <div id="tab-pages">
+        <form action="chasm.php" method="post">
+          <div class="tab-page selected info">
+            <p>Enter the slope name and location</p>
+            <table>
+              <tr>
+                <th>Name</th>
+                <td><input name="info_name" id="info_name" type="text"/></td>
+              </tr>
+              <tr>
+                <th>Latitude<br><span style="font-weight:normal; font-size:0.8em;">in decimal degrees</span></th>
+                <td><input onkeypress="validate(event)" name="info_latitude" id="info_latitude" type="text"/></td>
+              </tr>
+              <tr>
+                <th>Longitude<br><span style="font-weight:normal; font-size:0.8em;">in decimal degrees</span></th>
+                <td><input onkeypress="validate(event)" name="info_long" id="info_long" type="text"/></td>
+              </tr>
+              <tr>
+                <td colspan="2" class="callout">(assume WGS84 coordinate system)</td>
+              </tr>
+            </table>
+          </div>
+          <div class="tab-page profile">
+            <p class="table-title">Enter profile segments</p>
+            <div class="table-title">
+              <a href="#" class="button add-profile-segment">Add New Segment</a>
+              <span># segments: <span class="num-profile-segments"></span></span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Height (m)</th>
+                  <th>Length (m)</th>
+                  <th>Angle (degrees)</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="profile-data">
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-page soil">
+            <p>Enter the solid strata:</p>
+            <table class="soil-table">
+              <tr>
+                <th></th><th>Strata 1</th><th>Strata 2</th><th>Strata 3</th><th>Strata 4</th>
+              </tr>
+              <tr>
+                <td class="table-title" colspan="5">Soil Type</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>
+                <select name="soil_type_strata1">
+                    <option value="" selected="selected"></option>
+                    <option value="1">I</option>
+                    <option value="2" >II</option>
+                    <option value="3" >III</option>
+                    <option value="4" >IV</option>
+                    <option value="5" >V</option>
+                    <option value="6" >VI</option>
+                  </select>
+                </td>
+                <td>
+                  <select name="soil_type_strata2">
+                    <option value="" selected="selected"></option>
+                    <option value="1" >I</option>
+                    <option value="2" >II</option>
+                    <option value="3" >III</option>
+                    <option value="4" >IV</option>
+                    <option value="5" >V</option>
+                    <option value="6" >VI</option>
+                  </select>
+                </td>
+                <td>
+                  <select name="soil_type_strata3">
+                    <option value="" selected="selected"></option>
+                    <option value="1" >I</option>
+                    <option value="2" >II</option>
+                    <option value="3" >III</option>
+                    <option value="4" >IV</option>
+                    <option value="5" >V</option>
+                    <option value="6" >VI</option>
+                  </select>
+                </td>
+                <td>
+                  <select name="soil_type_strata4">
+                    <option value="" selected="selected"></option>
+                    <option value="1" >I</option>
+                    <option value="2" >II</option>
+                    <option value="3" >III</option>
+                    <option value="4" >IV</option>
+                    <option value="5" >V</option>
+                    <option value="6" >VI</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th>C</th><td><input onkeypress="validate(event)" name="soil_strata1_c" id="soil_strata1_c"/></td><td><input onkeypress="validate(event)" name="soil_strata2_c" id="soil_strata2_c"/></td><td><input onkeypress="validate(event)" name="soil_strata3_c" id="soil_strata3_c"/></td><td><input onkeypress="validate(event)" name="soil_strata4_c" id="soil_strata4_c"/></td>
+              </tr>
+              <tr>
+                <th>phi</th><td><input onkeypress="validate(event)" name="soil_strata1_phi" id="soil_strata1_phi"/></td><td><input onkeypress="validate(event)" name="soil_strata2_phi" id="soil_strata2_phi"/></td><td><input onkeypress="validate(event)" name="soil_strata3_phi" id="soil_strata3_phi"/></td><td><input onkeypress="validate(event)" name="soil_strata4_phi" id="soil_strata4_phi"/></td>
+              </tr>
+              <tr>
+                <th>Ks</th><td><input onkeypress="validate(event, 'sci')" name="soil_strata1_ks" id="soil_strata1_ks"/></td><td><input onkeypress="validate(event, 'sci')" name="soil_strata2_ks" id="soil_strata2_ks"/></td><td><input onkeypress="validate(event, 'sci')" name="soil_strata3_ks" id="soil_strata3_ks"/></td><td><input onkeypress="validate(event, 'sci')" name="soil_strata4_ks" id="soil_strata4_ks"/></td>
+              </tr>
+              <tbody id="soil-tbody">
+              <tr id="soil-depths">
+                <td class="table-title"  colspan="5">Soil Depths (m)</td>
+              </tr>
+
+
+              </tbody>
+            </table>
+            <a href="#" style="padding:5px 10px;" class="button" onclick="renderSoil()">Render Soil</a>
+
+          </div>
+          <div class="tab-page water">
+            <p class="table-title">Enter the water table depths:</p>
+            <table>
+              <tbody id="water-tbody">
+              </tbody>
+            </table>
+            <a href="#" style="padding:5px 10px;" class="button" onclick="renderWaterTable()">Render Water Table</a>
+            <p class="table-title">Enter Upslope Recharge:</p>
+            <div onkeypress="validate(event)" class="table-title upslope-recharge"><input name="water_upslope_recharge" id="water_upslope_recharge"/></div>
+          </div>
+          <div class="tab-page rain">
+            <p class="table-title">Chose a rainfall event:</p>
+            <a style="padding:5px 10px; margin:10px 0px;" href="#" class="add-rainfall button">Add New Rainfall</a>
+            <table style="margin-top:10px;">
+              <tr><th>Frequency (yrs)</th><th>Duration (hrs)</th><th>Volume</th><th></th></tr>
+            </table>
+
+            <!-- <div>or</div>
+            <a href="#" class="define-rainfall button">Define a Rainfall</a>
+             -->
+          </div>
+
+      </div>
+      <!--
+      <div id="prev-next">
+        <a id="prev" href="javascript:func()">Prev</a>
+        <a id="next" href="javascript:func()">Next</a>
+      </div>
+      -->
+    </div>
+    <div id = "graph-col">
+      <div id="graph" style="height:460px;">
+      	<div id="box" class="jxgbox" style="position:relative;width:460px; height:460px;">
+        <div style="position:absolute; left:-15px; top: 220px; -webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg); -o-transform: rotate(-90deg);filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);font-size:0.8em; font-weight:bold;">Meters</div>
+		<div style="position:absolute; left: 200px; bottom: 0px;font-size:0.8em; font-weight:bold;">Meters</div>
+		<img src="img/legend.png" style="width:75px; position:absolute; top: 10px; right: 10px;"/>
+        </div>
+<script type="text/javascript" src="lib/UIgraph.js"></script>
+
+
+      </div>
+      <!--<div id="compute-button-holder"><input href="done.html" id="compute-button" class="button" type="submit" value="Create"></div>-->
+      <div id="compute-button-holder"><a href="done.html" id="compute-button" class="button">Create</a></div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  </form>
+</body>
+</html>

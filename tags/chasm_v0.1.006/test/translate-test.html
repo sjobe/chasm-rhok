@@ -1,0 +1,159 @@
+<html>
+<body>
+<script>
+// Constant for Height
+var H = 0;
+
+// Constant for Length
+var L = 1;
+
+// Constant for Theta
+var THETA = 2;
+
+// Constant for X coordinate
+var X = 0;
+
+// Constant for Y coordinate
+var Y = 1;
+
+// Convert degrees to radians
+function degreesToRadians( degrees ) {
+	return degrees * Math.PI / 180.0;
+}
+
+// Convert radians to degrees
+function radiansToDegrees( radians ) {
+	return radians * 180.0 / Math.PI;
+}
+
+// Given, the div IDs for the h/l/theta form elements and completes the missing value
+function autocomplete( h_id, l_id, theta_id ) {
+	var h = document.getElementById(h_id).value;
+	var l = document.getElementById(l_id).value;
+	var theta = document.getElementById(theta_id).value;
+	
+	if ( l && theta && !h) {
+		document.getElementById(h_id).value = getH( l, theta );
+	} else if ( h && theta && !l ) {
+		document.getElementById(l_id).value = getL( h, theta );
+	} else if( h && l && !theta ) {
+		document.getElementById(theta_id).value = getTheta( h, l );
+	}
+}
+
+// Get the height value given length and theta (in degrees)
+function getH( l, theta ) {
+	return l * Math.sin( degreesToRadians( theta ) );
+}
+
+// Get the length value given height and theta(in degrees)
+function getL( h, theta ) {
+	return h / Math.sin( degreesToRadians( theta ) );
+}
+
+// Get the theta value (in degrees) given the height and length
+function getTheta( h, l ) {
+	return radiansToDegrees( Math.asin( h / l ) );
+}
+
+// Given a point, height, length and theta (in degrees), calculates the next X,Y coordinate
+function getNextPoint( x, y, height, length, theta ) {
+	// given an [x, y] coordinate, length, and theta angle, computes the next [x, y] coordiate
+	return [Math.round( x + length * Math.cos( degreesToRadians( theta ) ) ), Math.round( y - height )];
+}
+
+// Given data array, computes total height
+function getTotalHeight(data) {
+
+	var totalHeight = 0;
+	for (var i=0; i < data.length; i++) {
+		totalHeight += data[i][H];
+	}
+	
+	return totalHeight;
+}
+
+// Given data array, computes total width
+function getTotalWidth( data ) {
+	// given data array, computes total width
+	var totalWidth = 0;
+	for (var i=0; i < data.length; i++) {
+		totalWidth += data[i][L];
+	}
+	
+	return totalWidth;
+}
+
+// Given data array, generates array of XY coordinates
+function generateXYPoints( data ) {
+	
+	var originHeight = getTotalHeight( data );
+	
+	// one more point than there are measurements
+	var xyPoints = new Array( data.length + 1 );
+	
+	xyPoints[0] = [0, originHeight];
+	
+	for ( var i=0; i < data.length; i++ ) {
+			xyPoints[i+1] = getNextPoint( xyPoints[i][X], xyPoints[i][Y], data[i][H], data[i][L], data[i][THETA] );
+	}
+
+	return xyPoints;
+}
+
+function test() {
+	var testData = [	[3, 	5, 	36.869897645844021296855612559093],
+						[10, 	26, 22.61986494804042617294901087668],
+						[7,		25,	16.260204708311957406288774881813],
+						[5,		13,	22.61986494804042617294901087668]	];
+						
+	var expectedValues = [ 	[0, 	25],
+							[4,		22],
+							[28,	12],
+							[52,	5],
+							[64,	0]	];
+						
+	var points = generateXYPoints( testData );	
+	
+	document.write("<h1>Plot Points</h1>");
+	document.write("<table border=1>");
+	document.write("<tr><th>Expected x</th><th>Expected y</th><th>Computed x</th><th>Computed y</th></tr>");
+	for (var i=0; i<points.length; i++) {	
+			document.write("<tr>");
+			document.write("<td>" + expectedValues[i][X] + "</td><td>" + expectedValues[i][Y] + "</td>");
+			document.write("<td>" + points[i][X] + "</td><td>" + points[i][Y] + "</td>");
+			document.write("</tr>");
+	}
+	document.write("</table>");
+	
+	document.write("<h1>Autocomplete H</h1>");
+	document.write("<table border=1>");
+	document.write("<tr><th>Expected Value</th><th>Computed Value</th>");
+	for (var i=0; i<testData.length; i++){
+		document.write("<tr><td>" + testData[i][H] + "</td><td>" + getH( testData[i][L], testData[i][THETA] ) + "</td></th>");
+	}
+	document.write("</table>");
+	
+	document.write("<h1>Autocomplete L</h1>");
+	document.write("<table border=1>");
+	document.write("<tr><th>Expected Value</th><th>Computed Value</th>");
+	for (var i=0; i<testData.length; i++){
+		document.write("<tr><td>" + testData[i][L] + "</td><td>" + getL( testData[i][H], testData[i][THETA] ) + "</td></th>");
+	}
+	document.write("</table>");
+	
+	document.write("<h1>Autocomplete Theta</h1>");
+	document.write("<table border=1>");
+	document.write("<tr><th>Expected Value</th><th>Computed Value</th>");
+	for (var i=0; i<testData.length; i++){
+		document.write("<tr><td>" + testData[i][THETA] + "</td><td>" + getTheta( testData[i][H], testData[i][L] ) + "</td></th>");
+	}
+	document.write("</table>");
+	
+}
+
+test();
+</script>
+<body>
+</body>
+</html>

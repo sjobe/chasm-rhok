@@ -1,0 +1,12 @@
+geometry file:/home/khripunov2/public_html/dev/rhok/chasm/03geometry.txt
+soils database file:/home/khripunov2/public_html/dev/rhok/chasm/grade6_soil.txt
+stability file:/home/khripunov2/public_html/dev/rhok/chasm/03stability.txt
+boundary conditions file:/home/khripunov2/public_html/dev/rhok/chasm/1in5_24rain.txt
+#reinforcement file:      reinforcement.txt
+#stochastic parameters:   stochastic.txt
+#vegetation file: veg.txt
+
+output files: 1 1
+output variables: 1 0 0 0 0
+duration of the simulation (h): 360
+time step (s):                  60
