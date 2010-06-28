@@ -83,6 +83,13 @@ function renderSoil(){
   
 }
 
+function renderWaterTable(){
+  var parentNode = document.getElementById('water-tbody');
+  var data = findChildValuesWithNamePrefixFromInputTypes('water_x', parentNode);
+  setWaterTableOffsets(data);
+  updateGraph();
+}
+
 $(document).ready(function(){
 	updateNumProfileSegmentsDisplay();
   $('#tabs a').click(function(){

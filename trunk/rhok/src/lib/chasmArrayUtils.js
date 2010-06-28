@@ -37,24 +37,20 @@ function buildStratas(parentNode, size){
   stratas[1] = buildDepth("soil_strata2", parentNode);
   stratas[2] = buildDepth("soil_strata3", parentNode);
   stratas[3] = buildDepth("soil_strata4", parentNode);
-  for(var i = 0; i < size; i++){  
-      data[i] = new Array(4);
-    if(stratas[0] && stratas[0].length == size){
-      data[i][0] = stratas[0][i];
-    }
-    if(stratas[1] && stratas[1].length == size){
-      data[i][1] = stratas[1][i];
-    }
-    if(stratas[2] && stratas[2].length == size){
-      data[i][2] = stratas[2][i];
-    }
-    if(stratas[3] && stratas[3].length == size){
-      data[i][3] = stratas[3][i];
-    }
+  if(stratas[0]){
+    data[0] = stratas[0];
+  }
+  if(stratas[1]){
+    data[1] = stratas[1];
+  }
+  if(stratas[2]){
+    data[2] = stratas[2];
+  }
+  if(stratas[3]){
+    data[3] = stratas[3];
   }
   return data;
 }
-
 
 <!-- findChildValueWithNamePrefix -->
 <!-- prefix: String               -->
