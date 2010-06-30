@@ -1,0 +1,12 @@
+geometry file:            geometry06.txt
+soils database file:      soil06.txt
+stability file:           stability06.txt
+boundary conditions file: 1in100_24rain.txt
+#reinforcement file:      reinforcement.txt
+#stochastic parameters:   stochastic.txt
+output files: 1 1
+output variables: 1 0 0 0 0
+duration of the simulation (h): 360
+time step (s):                  60
+
+#vegetation file: veg.txt
