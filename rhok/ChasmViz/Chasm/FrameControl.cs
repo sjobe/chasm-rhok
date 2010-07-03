@@ -114,5 +114,11 @@ namespace ChasmViz
 			Refresh();
 		}
 
+		private void toggleWaterTableToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			graphStyle.drawWaterTable = toggleWaterTableToolStripMenuItem.Checked;
+			Refresh();
+		}
+
 	}
 }
