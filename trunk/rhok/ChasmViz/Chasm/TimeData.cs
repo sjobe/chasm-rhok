@@ -118,8 +118,9 @@ namespace ChasmViz
 						allHours[index].Radius = float.Parse(tokens[5]);
 						allHours[index].Mass = float.Parse(tokens[6]);
 						allHours[index].Moisture = float.Parse(tokens[7]);
-						allHours[index].Influx = float.Parse(tokens[8]);
-						allHours[index].Precip = float.Parse(tokens[9]);
+						allHours[index].Influx = float.Parse(tokens[8]);	// conversion on this???
+						// convert from meters/second to millimeters/hour
+						allHours[index].Rainfall = float.Parse(tokens[9])*3600*1000;
 						allHours[index].Runout = float.Parse(tokens[10]);
 						allHours[index].Seismicity = float.Parse(tokens[11]);
 					}
@@ -227,8 +228,8 @@ namespace ChasmViz
 				timeNormalizeMinA = Math.Min(timeNormalizeMinA, GetValueA(count));
 				timeNormalizeMaxA = Math.Max(timeNormalizeMaxA, GetValueA(count));
 			}
-			timeNormalizeMinA -= 0.1f;
-			timeNormalizeMaxA += 0.1f;
+			timeNormalizeMinA -= (timeNormalizeMaxA - timeNormalizeMinA) * 0.25f;
+			timeNormalizeMaxA += (timeNormalizeMaxA - timeNormalizeMinA) * 0.25f;
 			timeNormalizeMinB = float.MaxValue;
 			timeNormalizeMaxB = float.MinValue;
 			for (int count = 0; count < NumTimes; count++)
@@ -236,8 +237,8 @@ namespace ChasmViz
 				timeNormalizeMinB = Math.Min(timeNormalizeMinB, GetValueB(count));
 				timeNormalizeMaxB = Math.Max(timeNormalizeMaxB, GetValueB(count));
 			}
-			timeNormalizeMinB -= 0.1f;
-			timeNormalizeMaxB += 0.1f;
+			timeNormalizeMinB -= (timeNormalizeMaxB - timeNormalizeMinB) * 0.25f;
+			timeNormalizeMaxB += (timeNormalizeMaxB - timeNormalizeMinB) * 0.25f;
 			DrawGraphLines(g, controlWidth, controlHeight);
 			PointF[] allPoints = new PointF[NumTimes];
 			for (int count = 0; count < NumTimes; count++)
@@ -302,6 +303,14 @@ namespace ChasmViz
 				g.DrawLine(Pens.Red, xPos, yPos, xPos + 16, yPos);
 				DrawString(g, count.ToString("F2"), xIndent - 48, yPos - 2, Color.Red);
 			}
+			// Draw line at 1.0, where factor of safety is at a landslide threshold
+			int yPos0 = (int)TransAY(1.0f);
+			if ((Globals.G.graphNameA == "Fos") && (1.0f >= timeNormalizeMinA) && (1.0f <= timeNormalizeMaxA))
+			{
+				g.FillRectangle(Brushes.Pink, xIndent, yPos0, NumTimes, TransAY(timeNormalizeMinA)-yPos0);
+				g.DrawLine(Pens.Red, xIndent, yPos0, xIndent + NumTimes, yPos0);
+			}
+
 			if (Globals.G.graphBOn)
 			{
 				// ticks along Y axis for graph B

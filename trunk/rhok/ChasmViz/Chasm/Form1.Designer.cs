@@ -33,15 +33,17 @@
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
 			this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
 			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
-			this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
-			this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStrip2 = new System.Windows.Forms.ToolStrip();
 			this.timeGraphControl1 = new ChasmViz.TimeGraphControl();
+			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -50,6 +52,7 @@
 			this.splitContainer2.Panel2.SuspendLayout();
 			this.splitContainer2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+			this.toolStrip2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -92,6 +95,28 @@
 			this.toolStrip1.TabIndex = 1;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
+			// toolStripComboBox1
+			// 
+			this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.toolStripComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+			this.toolStripComboBox1.Name = "toolStripComboBox1";
+			this.toolStripComboBox1.Size = new System.Drawing.Size(160, 25);
+			this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
+			// 
+			// toolStripComboBox2
+			// 
+			this.toolStripComboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.toolStripComboBox2.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+			this.toolStripComboBox2.Name = "toolStripComboBox2";
+			this.toolStripComboBox2.Size = new System.Drawing.Size(160, 25);
+			this.toolStripComboBox2.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox2_SelectedIndexChanged);
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(14, 0, 0, 0);
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			// 
 			// toolStripLabel1
 			// 
 			this.toolStripLabel1.Name = "toolStripLabel1";
@@ -112,6 +137,7 @@
 			// 
 			// splitContainer1.Panel2
 			// 
+			this.splitContainer1.Panel2.Controls.Add(this.toolStrip2);
 			this.splitContainer1.Panel2.Controls.Add(this.propertyGrid1);
 			this.splitContainer1.Size = new System.Drawing.Size(987, 520);
 			this.splitContainer1.SplitterDistance = 837;
@@ -163,37 +189,27 @@
 			// 
 			// propertyGrid1
 			// 
-			this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.propertyGrid1.Location = new System.Drawing.Point(0, 0);
+			this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+						| System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.propertyGrid1.Location = new System.Drawing.Point(0, 28);
 			this.propertyGrid1.Name = "propertyGrid1";
-			this.propertyGrid1.Size = new System.Drawing.Size(142, 516);
+			this.propertyGrid1.Size = new System.Drawing.Size(142, 488);
 			this.propertyGrid1.TabIndex = 0;
 			this.propertyGrid1.ToolbarVisible = false;
 			this.propertyGrid1.SelectedGridItemChanged += new System.Windows.Forms.SelectedGridItemChangedEventHandler(this.propertyGrid1_SelectedGridItemChanged);
 			this.propertyGrid1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.propertyGrid1_MouseClick);
 			this.propertyGrid1.Click += new System.EventHandler(this.propertyGrid1_Click);
 			// 
-			// toolStripComboBox1
+			// toolStrip2
 			// 
-			this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.toolStripComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
-			this.toolStripComboBox1.Name = "toolStripComboBox1";
-			this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
-			this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
-			// 
-			// toolStripComboBox2
-			// 
-			this.toolStripComboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.toolStripComboBox2.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
-			this.toolStripComboBox2.Name = "toolStripComboBox2";
-			this.toolStripComboBox2.Size = new System.Drawing.Size(121, 25);
-			this.toolStripComboBox2.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox2_SelectedIndexChanged);
-			// 
-			// toolStripSeparator1
-			// 
-			this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(92, 0, 0, 0);
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel2});
+			this.toolStrip2.Location = new System.Drawing.Point(0, 0);
+			this.toolStrip2.Name = "toolStrip2";
+			this.toolStrip2.Size = new System.Drawing.Size(142, 25);
+			this.toolStrip2.TabIndex = 1;
+			this.toolStrip2.Text = "toolStrip2";
 			// 
 			// timeGraphControl1
 			// 
@@ -203,6 +219,12 @@
 			this.timeGraphControl1.Name = "timeGraphControl1";
 			this.timeGraphControl1.Size = new System.Drawing.Size(833, 124);
 			this.timeGraphControl1.TabIndex = 0;
+			// 
+			// toolStripLabel2
+			// 
+			this.toolStripLabel2.Name = "toolStripLabel2";
+			this.toolStripLabel2.Size = new System.Drawing.Size(66, 22);
+			this.toolStripLabel2.Text = "Parameters";
 			// 
 			// Form1
 			// 
@@ -223,10 +245,13 @@
 			this.toolStrip1.PerformLayout();
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
+			this.splitContainer1.Panel2.PerformLayout();
 			this.splitContainer1.ResumeLayout(false);
 			this.splitContainer2.Panel2.ResumeLayout(false);
 			this.splitContainer2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+			this.toolStrip2.ResumeLayout(false);
+			this.toolStrip2.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -247,6 +272,8 @@
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
 		private System.Windows.Forms.ToolStripComboBox toolStripComboBox2;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStrip toolStrip2;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel2;
 	}
 }
 

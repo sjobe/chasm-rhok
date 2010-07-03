@@ -13,5 +13,6 @@ namespace ChasmViz
 		public bool spacing = true;
 		public int graphLineSpacing = 10;
 		public bool drawCircle = true;
+		public bool drawWaterTable = true;
 	}
 }

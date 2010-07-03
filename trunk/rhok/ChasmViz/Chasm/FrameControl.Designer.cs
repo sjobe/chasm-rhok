@@ -36,8 +36,9 @@
 			this.gridInBackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.gridOffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.cellSpacingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.doubleBufferedPanel1 = new ChasmViz.DoubleBufferedPanel();
 			this.toggleCircleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.doubleBufferedPanel1 = new ChasmViz.DoubleBufferedPanel();
+			this.toggleWaterTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -73,7 +74,8 @@
             this.gridInBackToolStripMenuItem,
             this.gridOffToolStripMenuItem,
             this.cellSpacingToolStripMenuItem,
-            this.toggleCircleToolStripMenuItem});
+            this.toggleCircleToolStripMenuItem,
+            this.toggleWaterTableToolStripMenuItem});
 			this.toolStripDropDownButton1.Image = global::ChasmViz.Properties.Resources.GridIcon;
 			this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -84,21 +86,21 @@
 			// gridInFrontToolStripMenuItem
 			// 
 			this.gridInFrontToolStripMenuItem.Name = "gridInFrontToolStripMenuItem";
-			this.gridInFrontToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.gridInFrontToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
 			this.gridInFrontToolStripMenuItem.Text = "Grid in front";
 			this.gridInFrontToolStripMenuItem.Click += new System.EventHandler(this.gridInFrontToolStripMenuItem_Click);
 			// 
 			// gridInBackToolStripMenuItem
 			// 
 			this.gridInBackToolStripMenuItem.Name = "gridInBackToolStripMenuItem";
-			this.gridInBackToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.gridInBackToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
 			this.gridInBackToolStripMenuItem.Text = "Grid in back";
 			this.gridInBackToolStripMenuItem.Click += new System.EventHandler(this.gridInBackToolStripMenuItem_Click);
 			// 
 			// gridOffToolStripMenuItem
 			// 
 			this.gridOffToolStripMenuItem.Name = "gridOffToolStripMenuItem";
-			this.gridOffToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.gridOffToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
 			this.gridOffToolStripMenuItem.Text = "Grid off";
 			this.gridOffToolStripMenuItem.Click += new System.EventHandler(this.gridOffToolStripMenuItem_Click);
 			// 
@@ -106,9 +108,19 @@
 			// 
 			this.cellSpacingToolStripMenuItem.CheckOnClick = true;
 			this.cellSpacingToolStripMenuItem.Name = "cellSpacingToolStripMenuItem";
-			this.cellSpacingToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.cellSpacingToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
 			this.cellSpacingToolStripMenuItem.Text = "Cell Spacing";
 			this.cellSpacingToolStripMenuItem.Click += new System.EventHandler(this.cellSpacingToolStripMenuItem_Click);
+			// 
+			// toggleCircleToolStripMenuItem
+			// 
+			this.toggleCircleToolStripMenuItem.Checked = true;
+			this.toggleCircleToolStripMenuItem.CheckOnClick = true;
+			this.toggleCircleToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.toggleCircleToolStripMenuItem.Name = "toggleCircleToolStripMenuItem";
+			this.toggleCircleToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.toggleCircleToolStripMenuItem.Text = "Toggle Circle";
+			this.toggleCircleToolStripMenuItem.Click += new System.EventHandler(this.toggleCircleToolStripMenuItem_Click);
 			// 
 			// doubleBufferedPanel1
 			// 
@@ -119,15 +131,15 @@
 			this.doubleBufferedPanel1.TabIndex = 1;
 			this.doubleBufferedPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.doubleBufferedPanel1_Paint);
 			// 
-			// toggleCircleToolStripMenuItem
+			// toggleWaterTableToolStripMenuItem
 			// 
-			this.toggleCircleToolStripMenuItem.Checked = true;
-			this.toggleCircleToolStripMenuItem.CheckOnClick = true;
-			this.toggleCircleToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.toggleCircleToolStripMenuItem.Name = "toggleCircleToolStripMenuItem";
-			this.toggleCircleToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.toggleCircleToolStripMenuItem.Text = "Toggle Circle";
-			this.toggleCircleToolStripMenuItem.Click += new System.EventHandler(this.toggleCircleToolStripMenuItem_Click);
+			this.toggleWaterTableToolStripMenuItem.Checked = true;
+			this.toggleWaterTableToolStripMenuItem.CheckOnClick = true;
+			this.toggleWaterTableToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.toggleWaterTableToolStripMenuItem.Name = "toggleWaterTableToolStripMenuItem";
+			this.toggleWaterTableToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.toggleWaterTableToolStripMenuItem.Text = "Toggle Water Table";
+			this.toggleWaterTableToolStripMenuItem.Click += new System.EventHandler(this.toggleWaterTableToolStripMenuItem_Click);
 			// 
 			// FrameControl
 			// 
@@ -159,5 +171,6 @@
 		private System.Windows.Forms.ToolStripMenuItem gridOffToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem cellSpacingToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem toggleCircleToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem toggleWaterTableToolStripMenuItem;
 	}
 }

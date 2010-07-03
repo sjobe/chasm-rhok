@@ -18,7 +18,7 @@ namespace ChasmViz
 
 		// .fos file info
 		private float fos;
-		[CategoryAttribute("Hourly data"),
+		[CategoryAttribute("Stability"),
 		DescriptionAttribute("Factor Of Safety")]
 		public float Fos
 		{
@@ -26,7 +26,7 @@ namespace ChasmViz
 			set { fos = value; }
 		}
 		private float centreX;
-		[CategoryAttribute("Hourly data"),
+		[CategoryAttribute("Slip circle"),
 		DescriptionAttribute("Centre X")]
 		public float CentreX
 		{
@@ -34,7 +34,7 @@ namespace ChasmViz
 			set { centreX = value; }
 		}
 		private float centreY;
-		[CategoryAttribute("Hourly data"),
+		[CategoryAttribute("Slip circle"),
 		DescriptionAttribute("Centre Y")]
 		public float CentreY
 		{
@@ -42,7 +42,7 @@ namespace ChasmViz
 			set { centreY = value; }
 		}
 		private float radius;
-		[CategoryAttribute("Hourly data"),
+		[CategoryAttribute("Slip circle"),
 		DescriptionAttribute("Radius")]
 		public float Radius
 		{
@@ -50,7 +50,7 @@ namespace ChasmViz
 			set { radius = value; }
 		}
 		private float mass;
-		[CategoryAttribute("Hourly data"),
+		[CategoryAttribute("Slip circle"),
 		DescriptionAttribute("Mass")]
 		public float Mass
 		{
@@ -73,16 +73,16 @@ namespace ChasmViz
 			get { return influx; }
 			set { influx = value; }
 		}
-		private float precip;
+		private float rainfall;
 		[CategoryAttribute("Hourly data"),
-		DescriptionAttribute("Precipitation")]
-		public float Precip
+		DescriptionAttribute("Precipitation (mm/h)")]
+		public float Rainfall
 		{
-			get { return precip; }
-			set { precip = value; }
+			get { return rainfall; }
+			set { rainfall = value; }
 		}
 		private float runout;
-		[CategoryAttribute("Hourly data"),
+		[CategoryAttribute("Stability"),
 		DescriptionAttribute("Runout")]
 		public float Runout
 		{
@@ -90,7 +90,7 @@ namespace ChasmViz
 			set { runout = value; }
 		}
 		private float seismicity;
-		[CategoryAttribute("Hourly data"),
+		[CategoryAttribute("Stability"),
 		DescriptionAttribute("Seismicity")]
 		public float Seismicity
 		{
@@ -136,6 +136,60 @@ namespace ChasmViz
 					}
 				}
 			}
+		}
+
+		// These arrays tell the program which of the 4 edges need to be interpolated to make
+		// a line. They are pairs because they represent the line end points.
+		int[,] lineIndex1 = {{-1,-1}, {3,0}, {0,1}, {3,1}, {1,2}, {3,0}, {0,2}, {3,2},
+										{2,3}, {2,0}, {0,1}, {2,1}, {1,3}, {1,0}, {0,3}, {-1,-1}};
+		// It is possible (in 2 cases) that one block will make 2 lines. This array defines
+		// the second line.
+		int[,] lineIndex2 = {{-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}, {1,2}, {-1,-1}, {-1,-1},
+										{-1,-1}, {-1,-1}, {2,3}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}, {-1,-1}};
+
+		public List<LineSeg> Vectorize(float threshold)
+		{
+			List<LineSeg> lines = new List<LineSeg>();
+			float2[] vertList = new float2[4];
+			for (int y = 0; y < height - 1; y++)
+			{
+				for (int x = 0; x < width - 1; x++)
+				{
+					float pix00 = cells[x, y].poreWaterPressure;
+					float pix10 = cells[x+1, y].poreWaterPressure;
+					float pix01 = cells[x, y+1].poreWaterPressure;
+					float pix11 = cells[x+1, y+1].poreWaterPressure;
+					if ((pix00 >= 9999) || (pix10 >= 9999) || (pix01 >= 9999) || (pix11 >= 9999)) continue;
+
+					int squareIndex = 0;
+					if (pix00 < threshold) squareIndex |= 1;
+					if (pix10 < threshold) squareIndex |= 2;
+					if (pix11 < threshold) squareIndex |= 4;
+					if (pix01 < threshold) squareIndex |= 8;
+					if ((squareIndex == 0) || (squareIndex == 0xf)) continue;
+
+					// add 0.5 for center of pixel.
+					float2 pos00 = new float2((float)x + 0.5f, (float)y + 0.5f);
+					float2 pos10 = new float2((float)(x + 1) + 0.5f, (float)y + 0.5f);
+					float2 pos01 = new float2((float)x + 0.5f, (float)(y + 1) + 0.5f);
+					float2 pos11 = new float2((float)(x + 1) + 0.5f, (float)(y + 1) + 0.5f);
+
+					vertList[0] = float2.LerpStable(pos00, pos10, ((float)(threshold - pix00)) / ((float)(pix10 - pix00)) );
+					vertList[1] = float2.LerpStable(pos10, pos11, ((float)(threshold - pix10)) / ((float)(pix11 - pix10)) );
+					vertList[2] = float2.LerpStable(pos11, pos01, ((float)(threshold - pix11)) / ((float)(pix01 - pix11)) );
+					vertList[3] = float2.LerpStable(pos01, pos00, ((float)(threshold - pix01)) / ((float)(pix00 - pix01)) );
+
+					int vertA = lineIndex1[squareIndex,0];
+					int vertB = lineIndex1[squareIndex,1];
+					int vert2A = lineIndex2[squareIndex,0];
+					int vert2B = lineIndex2[squareIndex,1];
+
+					// put final lines in the line list
+					if (vertA != -1) lines.Add(new LineSeg(vertList[vertA], vertList[vertB]));
+					if (vert2A != -1) lines.Add(new LineSeg(vertList[vert2A], vertList[vert2B]));
+				}
+			}
+			return lines;
 		}
 
 		// Draw a string to the screen at a certain x, y position
@@ -196,6 +250,24 @@ namespace ChasmViz
 			DrawCircle(g, xCen, yCen, 2);
 		}
 
+		public void DrawWaterTable(Graphics g, GraphStyle graphStyle)
+		{
+			if (!graphStyle.drawWaterTable) return;
+
+			int cellSize = graphStyle.cellSize;
+			List<LineSeg> lines = Vectorize(0.0f);
+			Pen p = new Pen(Color.DarkBlue, 2.0f);
+			foreach (LineSeg l in lines)
+			{
+				l.a.x = TransX(l.a.x, cellSize);
+				l.a.y = TransY(l.a.y, cellSize);
+				l.b.x = TransX(l.b.x, cellSize);
+				l.b.y = TransY(l.b.y, cellSize);
+				g.DrawLine(p, l.a.x, l.a.y, l.b.x, l.b.y);
+			}
+			p.Dispose();
+		}
+
 		public void DrawPressure(Graphics g, float normalizeMin, float normalizeMax, GraphStyle graphStyle)
 		{
 			int cellSpacing = -1;
@@ -210,13 +282,15 @@ namespace ChasmViz
 					float pressure = cells[x, y].poreWaterPressure;
 					if (pressure < 9999)
 					{
-						pressure = (pressure - normalizeMin) / (normalizeMax - normalizeMin);
-						int palIndex = (int)(pressure * 255);
+						float pressureNorm = (pressure - normalizeMin) / (normalizeMax - normalizeMin);
+						int palIndex = (int)(pressureNorm * 255);
 						palIndex = Math.Min(palIndex, 255);
 						palIndex = Math.Max(palIndex, 0);
 						Brush b = new SolidBrush(Color.FromArgb(palette[palIndex]));
+						//if (pressure < 0) b = new SolidBrush(Color.FromArgb(palette[palIndex] | 0x00808080));
 						g.FillRectangle(b, x * cellSize + xIndent,
 							((height - 1) - y) * cellSize + yIndent, cellSize + cellSpacing, cellSize + cellSpacing);
+						b.Dispose();
 					}
 				}
 			}
@@ -231,15 +305,17 @@ namespace ChasmViz
 				palIndex = Math.Min(palIndex, 255);
 				palIndex = Math.Max(palIndex, 0);
 				Brush b = new SolidBrush(Color.FromArgb(palette[palIndex]));
-				int yBig = (int)(height * cellSize * 0.1f * 0.75f);
+				int cellSizeY = Math.Min(cellSize, 4);
+				int yBig = (int)(height * cellSizeY * 0.1f * 0.75f);
 				yBig = Math.Min(yBig, 16);
 				int xPos = cellSize * width + 16 + xIndent;
-				int yPos = ((height * cellSize)) - (int)(index * (height * cellSize * 0.1f)) + yIndent - yBig;
+				int yPos = ((height * cellSizeY)) - (int)(index * (height * cellSizeY * 0.1f)) + yIndent - yBig;
 				g.FillRectangle(b, xPos, yPos, yBig, yBig);
-				DrawString(g, count.ToString("F4"), xPos + yBig, yPos - yBig/3, Color.Black, "Courier New", Math.Max(yBig, 6));
+				DrawString(g, count.ToString("F4"), xPos + yBig, yPos - yBig / 3, Color.Black, "Courier New", Math.Max(yBig, 6));
 				index++;
 			}
 			DrawDangerCircle(g, graphStyle);
+			DrawWaterTable(g, graphStyle);
 		}
 
 		void DrawCircle(Graphics g, float x, float y, float rad)
@@ -258,6 +334,7 @@ namespace ChasmViz
 			float minMoisture = float.MaxValue;
 			float maxMoisture = float.MinValue;
 			int rainbowScale = 3;
+			int rainbowOffset = 80;
 			for (int y = 0; y < height; y++)
 			{
 				for (int x = 0; x < width; x++)
@@ -267,7 +344,7 @@ namespace ChasmViz
 					{
 						minMoisture = Math.Min(minMoisture, moisture);
 						maxMoisture = Math.Max(maxMoisture, moisture);
-						int palIndex = (int)((1.0f - moisture) * 255 * rainbowScale);	// this number is arbitrary.
+						int palIndex = (int)((1.0f - moisture) * 255 * rainbowScale + rainbowOffset);	// this number is arbitrary.
 						palIndex &= 0xff;
 						Brush b = new SolidBrush(Color.FromArgb(palette[palIndex]));
 						g.FillRectangle(b, x * cellSize + xIndent, ((height - 1) - y) * cellSize + yIndent,
@@ -285,14 +362,15 @@ namespace ChasmViz
 			for (int index = 0; index <= 10; index++)
 			{
 				float pressure = count;
-				int palIndex = (int)((1.0f - pressure) * 255 * rainbowScale);	// this number is arbitrary.
+				int palIndex = (int)((1.0f - pressure) * 255 * rainbowScale + rainbowOffset);	// this number is arbitrary.
 				palIndex &= 0xff;
 				Brush b = new SolidBrush(Color.FromArgb(palette[palIndex]));
-				int yBig = (int)(height * cellSize * 0.1f * 0.75f);
+				int cellSizeY = Math.Min(cellSize, 4);
+				int yBig = (int)(height * cellSizeY * 0.1f * 0.75f);
 				yBig = Math.Min(yBig, 16);
 				int xPos = cellSize * width + 16 + xIndent;
 				//int yPos = ((height*cellSize)) - index * 20;
-				int yPos = ((height * cellSize)) - (int)(index * (height * cellSize * 0.1f)) + yIndent - yBig;
+				int yPos = ((height * cellSizeY)) - (int)(index * (height * cellSizeY * 0.1f)) + yIndent - yBig;
 				g.FillRectangle(b, xPos, yPos, yBig, yBig);
 				//DrawString(g, count.ToString("F4"), xPos + 20, yPos, Color.Black);
 				DrawString(g, count.ToString("F4"), xPos + yBig, yPos - yBig / 3, Color.Black, "Courier New", Math.Max(yBig, 6));
@@ -300,6 +378,7 @@ namespace ChasmViz
 //				index++;
 			}
 			DrawDangerCircle(g, graphStyle);
+			DrawWaterTable(g, graphStyle);
 		}
 
 		public void DrawSoilType(Graphics g, GraphStyle graphStyle)
@@ -310,12 +389,18 @@ namespace ChasmViz
 			DrawStringBold(g, "Soil Type", xIndent, 0, Color.Black);
 			DrawGraphLines(g, graphStyle);
 			Color[] soilPalette = new Color[6];
-			soilPalette[0] = Color.FromArgb(51, 51, 51);	// as defined by CHASM_notes1.doc from Liz
-			soilPalette[1] = Color.FromArgb(140, 140, 140);
-			soilPalette[2] = Color.FromArgb(88, 29, 0);
-			soilPalette[3] = Color.FromArgb(110, 82, 44);
-			soilPalette[4] = Color.FromArgb(150, 111, 60);
-			soilPalette[5] = Color.FromArgb(255, 159, 63);
+			soilPalette[0] = Color.FromArgb(220, 195, 110);	// as defined by CHASM_notes1.doc from Liz
+			soilPalette[1] = Color.FromArgb(195, 160, 94);
+			soilPalette[2] = Color.FromArgb(140, 90, 30);
+			soilPalette[3] = Color.FromArgb(88, 29, 0);
+			soilPalette[4] = Color.FromArgb(140, 140, 140);
+			soilPalette[5] = Color.FromArgb(51, 51, 51);
+			//soilPalette[0] = Color.FromArgb(51, 51, 51);	// as defined by CHASM_notes1.doc from Liz
+			//soilPalette[1] = Color.FromArgb(140, 140, 140);
+			//soilPalette[2] = Color.FromArgb(88, 29, 0);
+			//soilPalette[3] = Color.FromArgb(110, 82, 44);
+			//soilPalette[4] = Color.FromArgb(150, 111, 60);
+			//soilPalette[5] = Color.FromArgb(255, 159, 63);
 			if (graphStyle.renderGrid && !graphStyle.gridInFront) DrawGrid(g, graphStyle);
 			for (int y = 0; y < height; y++)
 			{
@@ -335,14 +420,16 @@ namespace ChasmViz
 			{
 				int palIndex = index;
 				Brush b = new SolidBrush(soilPalette[palIndex]);
-				int yBig = (int)(height * cellSize * 0.1f * 0.75f);
+				int cellSizeY = Math.Min(cellSize, 4);
+				int yBig = (int)(height * cellSizeY * 0.1f * 0.75f);
 				yBig = Math.Min(yBig, 16);
 				int xPos = cellSize * width + 16 + xIndent;
-				int yPos = (int)(index * (height * cellSize * 0.1f)) + yIndent;
+				int yPos = (int)(index * (height * cellSizeY * 0.1f)) + yIndent;
 				g.FillRectangle(b, xPos, yPos, yBig, yBig);
 				DrawString(g, "soil " + index, xPos + yBig, yPos - yBig / 3, Color.Black, "Courier New", Math.Max(yBig, 6));
 			}
 			DrawDangerCircle(g, graphStyle);
+			DrawWaterTable(g, graphStyle);
 		}
 
 		void DrawGrid(Graphics g, GraphStyle graphStyle)
