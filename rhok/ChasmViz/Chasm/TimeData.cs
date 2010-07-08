@@ -29,6 +29,9 @@ namespace ChasmViz
 		float timeNormalizeMinA, timeNormalizeMaxA;
 		float timeNormalizeMinB, timeNormalizeMaxB;
 
+		float[] timeDataA = null;
+		float[] timeDataB = null;
+
 		public int NumTimes
 		{
 			get { return allHours.Count; }
@@ -214,12 +217,8 @@ namespace ChasmViz
 			return da.Description;
 		}
 
-		public int xIndent = 88;
-		public int yIndent = 16;
-		int controlHeight;
-		public void DrawTimeLine(Graphics g, int controlWidth, int controlHeight)
+		public void RefreshGraphDataA()
 		{
-			this.controlHeight = controlHeight;
 			// Start by finding min and max over time so we can normalize the graph.
 			timeNormalizeMinA = float.MaxValue;
 			timeNormalizeMaxA = float.MinValue;
@@ -230,6 +229,21 @@ namespace ChasmViz
 			}
 			timeNormalizeMinA -= (timeNormalizeMaxA - timeNormalizeMinA) * 0.25f;
 			timeNormalizeMaxA += (timeNormalizeMaxA - timeNormalizeMinA) * 0.25f;
+			if (timeNormalizeMinA == timeNormalizeMaxA)
+			{
+				timeNormalizeMinA -= 0.1f;
+				timeNormalizeMaxA += 0.1f;
+			}
+			timeDataA = new float[NumTimes];
+			for (int count = 0; count < NumTimes; count++)
+			{
+				timeDataA[count] = GetValueA(count);
+			}
+		}
+
+		public void RefreshGraphDataB()
+		{
+			// Start by finding min and max over time so we can normalize the graph.
 			timeNormalizeMinB = float.MaxValue;
 			timeNormalizeMaxB = float.MinValue;
 			for (int count = 0; count < NumTimes; count++)
@@ -239,23 +253,65 @@ namespace ChasmViz
 			}
 			timeNormalizeMinB -= (timeNormalizeMaxB - timeNormalizeMinB) * 0.25f;
 			timeNormalizeMaxB += (timeNormalizeMaxB - timeNormalizeMinB) * 0.25f;
-			DrawGraphLines(g, controlWidth, controlHeight);
-			PointF[] allPoints = new PointF[NumTimes];
+			if (timeNormalizeMinB == timeNormalizeMaxB)
+			{
+				timeNormalizeMinB -= 0.1f;
+				timeNormalizeMaxB += 0.1f;
+			}
+			timeDataB = new float[NumTimes];
 			for (int count = 0; count < NumTimes; count++)
 			{
-				allPoints[count] = new PointF(count + xIndent, TransAY(GetValueA(count)));
+				timeDataB[count] = GetValueB(count);
 			}
-			g.DrawLines(Pens.Red, allPoints);
-			DrawStringBold(g, GetDescriptionA(), xIndent - 80, yIndent / 2, Color.Red);
-			if (Globals.G.graphBOn)
+		}
+
+		public int xIndent = 88;
+		public int yIndent = 16;
+		int controlHeight;
+		public void DrawTimeLine(Graphics g, int controlWidth, int controlHeight)
+		{
+			this.controlHeight = controlHeight;
+			RefreshGraphDataA();
+			RefreshGraphDataB();
+			DrawGraphLines(g, controlWidth, controlHeight);
+
+			// Graph B
+			PointF[] allPoints = new PointF[NumTimes];
+			if ( (Globals.G.graphBOn) && (timeNormalizeMaxB != timeNormalizeMinB) )
 			{
+				if (Globals.G.graphNameB == "Rainfall")
+				{
+					Rectangle[] allRects = new Rectangle[NumTimes];
+					SolidBrush b = new SolidBrush(Color.FromArgb(64, 0, 0, 255));
+					for (int count = 0; count < NumTimes; count++)
+					{
+						int yPos = (int)TransBY(timeDataB[count]);
+						int rectH = (int)TransBY(timeNormalizeMinB) - yPos;
+						allRects[count] = new Rectangle(count + xIndent, yPos, 1, rectH);
+					}
+					g.FillRectangles(b, allRects);
+					b.Dispose();
+				}
+
 				for (int count = 0; count < NumTimes; count++)
 				{
-					allPoints[count] = new PointF(count + xIndent, TransBY(GetValueB(count)));
+					allPoints[count] = new PointF(count + xIndent, (int)TransBY(timeDataB[count]));
 				}
 				g.DrawLines(Pens.Blue, allPoints);
 				DrawStringBold(g, GetDescriptionB(), NumTimes + xIndent + 68, yIndent/2, Color.Blue);
 			}
+
+			// Graph A
+			if (timeNormalizeMaxA != timeNormalizeMinA)
+			{
+				for (int count = 0; count < NumTimes; count++)
+				{
+					allPoints[count] = new PointF(count + xIndent, (int)TransAY(timeDataA[count]));
+				}
+				g.DrawLines(Pens.Red, allPoints);
+				DrawStringBold(g, GetDescriptionA(), xIndent - 80, yIndent / 2, Color.Red);
+			}
+
 			int graphHeight = controlHeight - yIndent * 2;
 			g.DrawLine(Pens.Black, CurrentTime + xIndent, 0, CurrentTime + xIndent, graphHeight + yIndent);
 		}
@@ -305,11 +361,13 @@ namespace ChasmViz
 			}
 			// Draw line at 1.0, where factor of safety is at a landslide threshold
 			int yPos0 = (int)TransAY(1.0f);
+			SolidBrush b = new SolidBrush(Color.FromArgb(64, 255, 0, 0));
 			if ((Globals.G.graphNameA == "Fos") && (1.0f >= timeNormalizeMinA) && (1.0f <= timeNormalizeMaxA))
 			{
-				g.FillRectangle(Brushes.Pink, xIndent, yPos0, NumTimes, TransAY(timeNormalizeMinA)-yPos0);
+				g.FillRectangle(b, xIndent, yPos0, NumTimes, TransAY(timeNormalizeMinA)-yPos0);
 				g.DrawLine(Pens.Red, xIndent, yPos0, xIndent + NumTimes, yPos0);
 			}
+			b.Dispose();
 
 			if (Globals.G.graphBOn)
 			{

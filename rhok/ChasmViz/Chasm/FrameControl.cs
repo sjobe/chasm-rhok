@@ -120,5 +120,12 @@ namespace ChasmViz
 			Refresh();
 		}
 
+		private void doubleBufferedPanel1_MouseClick(object sender, MouseEventArgs e)
+		{
+			Globals.G.selectedGraph = graphType;
+			Globals.G.SetSelectedCell(e.X, e.Y, graphStyle.cellSize);
+			Globals.G.mainForm.Refresh();
+		}
+
 	}
 }

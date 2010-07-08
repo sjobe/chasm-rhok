@@ -40,10 +40,13 @@
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
 			this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
 			this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-			this.timeGraphControl1 = new ChasmViz.TimeGraphControl();
 			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+			this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.doubleBufferedPanel1 = new ChasmViz.DoubleBufferedPanel();
+			this.timeGraphControl1 = new ChasmViz.TimeGraphControl();
+			this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -53,6 +56,7 @@
 			this.splitContainer2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			this.toolStrip2.SuspendLayout();
+			this.doubleBufferedPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -88,7 +92,9 @@
             this.toolStripComboBox1,
             this.toolStripComboBox2,
             this.toolStripSeparator1,
-            this.toolStripLabel1});
+            this.toolStripLabel1,
+            this.toolStripSeparator2,
+            this.toolStripLabel3});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(833, 25);
@@ -157,8 +163,8 @@
 			// 
 			// splitContainer2.Panel2
 			// 
+			this.splitContainer2.Panel2.Controls.Add(this.doubleBufferedPanel1);
 			this.splitContainer2.Panel2.Controls.Add(this.numericUpDown1);
-			this.splitContainer2.Panel2.Controls.Add(this.timeGraphControl1);
 			this.splitContainer2.Panel2.Controls.Add(this.toolStrip1);
 			this.splitContainer2.Size = new System.Drawing.Size(837, 520);
 			this.splitContainer2.SplitterDistance = 363;
@@ -187,6 +193,22 @@
             0});
 			this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
 			// 
+			// toolStrip2
+			// 
+			this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel2});
+			this.toolStrip2.Location = new System.Drawing.Point(0, 0);
+			this.toolStrip2.Name = "toolStrip2";
+			this.toolStrip2.Size = new System.Drawing.Size(142, 25);
+			this.toolStrip2.TabIndex = 1;
+			this.toolStrip2.Text = "toolStrip2";
+			// 
+			// toolStripLabel2
+			// 
+			this.toolStripLabel2.Name = "toolStripLabel2";
+			this.toolStripLabel2.Size = new System.Drawing.Size(66, 22);
+			this.toolStripLabel2.Text = "Parameters";
+			// 
 			// propertyGrid1
 			// 
 			this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -201,30 +223,36 @@
 			this.propertyGrid1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.propertyGrid1_MouseClick);
 			this.propertyGrid1.Click += new System.EventHandler(this.propertyGrid1_Click);
 			// 
-			// toolStrip2
+			// toolStripSeparator2
 			// 
-			this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel2});
-			this.toolStrip2.Location = new System.Drawing.Point(0, 0);
-			this.toolStrip2.Name = "toolStrip2";
-			this.toolStrip2.Size = new System.Drawing.Size(142, 25);
-			this.toolStrip2.TabIndex = 1;
-			this.toolStrip2.Text = "toolStrip2";
+			this.toolStripSeparator2.Margin = new System.Windows.Forms.Padding(140, 0, 0, 0);
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+			// 
+			// doubleBufferedPanel1
+			// 
+			this.doubleBufferedPanel1.AutoScroll = true;
+			this.doubleBufferedPanel1.Controls.Add(this.timeGraphControl1);
+			this.doubleBufferedPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.doubleBufferedPanel1.Location = new System.Drawing.Point(0, 25);
+			this.doubleBufferedPanel1.Name = "doubleBufferedPanel1";
+			this.doubleBufferedPanel1.Size = new System.Drawing.Size(833, 124);
+			this.doubleBufferedPanel1.TabIndex = 7;
 			// 
 			// timeGraphControl1
 			// 
 			this.timeGraphControl1.AutoScroll = true;
-			this.timeGraphControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.timeGraphControl1.Location = new System.Drawing.Point(0, 25);
+			this.timeGraphControl1.Dock = System.Windows.Forms.DockStyle.Left;
+			this.timeGraphControl1.Location = new System.Drawing.Point(0, 0);
 			this.timeGraphControl1.Name = "timeGraphControl1";
-			this.timeGraphControl1.Size = new System.Drawing.Size(833, 124);
+			this.timeGraphControl1.Size = new System.Drawing.Size(891, 107);
 			this.timeGraphControl1.TabIndex = 0;
 			// 
-			// toolStripLabel2
+			// toolStripLabel3
 			// 
-			this.toolStripLabel2.Name = "toolStripLabel2";
-			this.toolStripLabel2.Size = new System.Drawing.Size(66, 22);
-			this.toolStripLabel2.Text = "Parameters";
+			this.toolStripLabel3.Name = "toolStripLabel3";
+			this.toolStripLabel3.Size = new System.Drawing.Size(77, 22);
+			this.toolStripLabel3.Text = "Selected Cell:";
 			// 
 			// Form1
 			// 
@@ -252,6 +280,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
 			this.toolStrip2.ResumeLayout(false);
 			this.toolStrip2.PerformLayout();
+			this.doubleBufferedPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -274,6 +303,9 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStrip toolStrip2;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+		private DoubleBufferedPanel doubleBufferedPanel1;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel3;
 	}
 }
 

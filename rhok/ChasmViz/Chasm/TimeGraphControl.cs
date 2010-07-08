@@ -25,7 +25,7 @@ namespace ChasmViz
 		bool mouseDown = false;
 		private void TimeGraphControl_MouseDown(object sender, MouseEventArgs e)
 		{
-			this.Size = new Size(1400, this.Size.Height);
+//			this.Size = new Size(1400, this.Size.Height);
 			mouseDown = true;
 			Globals.G.timeData.CurrentTime = e.X - Globals.G.timeData.xIndent;
 			((Form1)ParentForm).TimeChanged();
