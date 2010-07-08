@@ -59,7 +59,7 @@ namespace ChasmViz
 			}
 			toolStripComboBox2.Items.Add("Disable Graph");
 			toolStripComboBox1.SelectedIndex = 0;
-			toolStripComboBox2.SelectedIndex = 5;
+			toolStripComboBox2.SelectedIndex = 7;
 		}
 
 		public void SetupControls()
@@ -67,6 +67,8 @@ namespace ChasmViz
 			if (Globals.G.timeData == null) return;
 			if (Globals.G.timeData.NumTimes == 0) return;
 			numericUpDown1.Maximum = Globals.G.timeData.NumTimes;
+			timeGraphControl1.ClientSize = new Size(Globals.G.timeData.NumTimes + Globals.G.timeData.xIndent + 96,
+				timeGraphControl1.ClientSize.Height);
 			if (currentControlIndex == FrameControl.GraphTypeEnum.None)
 			{
 				allContainers[0].CalcAndSetSize(this.splitContainer2.Panel1.ClientSize.Width / 2 - 2,
@@ -131,6 +133,12 @@ namespace ChasmViz
 			toolStripLabel1.Text = "Time: (" + (Globals.G.timeData.CurrentTime + 1) + "/" + Globals.G.timeData.NumTimes + ") ";
 			numericUpDown1.Value = Globals.G.timeData.CurrentTime + 1;
 			propertyGrid1.SelectedObject = Globals.G.timeData.allHours[Globals.G.timeData.CurrentTime];
+			if (!Globals.G.ValidCellSelection())
+			{
+				Globals.G.selectedCellX = 0;
+				Globals.G.selectedCellY = 0;
+			}
+			toolStripLabel3.Text = "Selected Cell: (" + Globals.G.selectedCellX + ", " + Globals.G.selectedCellY + ")";
 			Refresh();
 		}
 
@@ -153,7 +161,7 @@ namespace ChasmViz
 
 		private void propertyGrid1_Click(object sender, EventArgs e)
 		{
-			Console.WriteLine(propertyGrid1.SelectedGridItem.Label);
+//			Console.WriteLine(propertyGrid1.SelectedGridItem.Label);
 		}
 
 		private void propertyGrid1_MouseClick(object sender, MouseEventArgs e)
@@ -166,6 +174,7 @@ namespace ChasmViz
 		private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			Globals.G.graphNameA = graphFields[(string)toolStripComboBox1.SelectedItem];
+			Globals.G.timeData.RefreshGraphDataA();
 			Refresh();
 		}
 
@@ -178,6 +187,7 @@ namespace ChasmViz
 				Globals.G.graphBOn = true;
 				Globals.G.graphNameB = graphFields[selection];
 			}
+			Globals.G.timeData.RefreshGraphDataB();
 			Refresh();
 		}
 

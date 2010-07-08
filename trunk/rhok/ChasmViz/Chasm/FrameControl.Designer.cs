@@ -37,8 +37,8 @@
 			this.gridOffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.cellSpacingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toggleCircleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.doubleBufferedPanel1 = new ChasmViz.DoubleBufferedPanel();
 			this.toggleWaterTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.doubleBufferedPanel1 = new ChasmViz.DoubleBufferedPanel();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -122,15 +122,6 @@
 			this.toggleCircleToolStripMenuItem.Text = "Toggle Circle";
 			this.toggleCircleToolStripMenuItem.Click += new System.EventHandler(this.toggleCircleToolStripMenuItem_Click);
 			// 
-			// doubleBufferedPanel1
-			// 
-			this.doubleBufferedPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.doubleBufferedPanel1.Location = new System.Drawing.Point(0, 25);
-			this.doubleBufferedPanel1.Name = "doubleBufferedPanel1";
-			this.doubleBufferedPanel1.Size = new System.Drawing.Size(398, 299);
-			this.doubleBufferedPanel1.TabIndex = 1;
-			this.doubleBufferedPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.doubleBufferedPanel1_Paint);
-			// 
 			// toggleWaterTableToolStripMenuItem
 			// 
 			this.toggleWaterTableToolStripMenuItem.Checked = true;
@@ -140,6 +131,16 @@
 			this.toggleWaterTableToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
 			this.toggleWaterTableToolStripMenuItem.Text = "Toggle Water Table";
 			this.toggleWaterTableToolStripMenuItem.Click += new System.EventHandler(this.toggleWaterTableToolStripMenuItem_Click);
+			// 
+			// doubleBufferedPanel1
+			// 
+			this.doubleBufferedPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.doubleBufferedPanel1.Location = new System.Drawing.Point(0, 25);
+			this.doubleBufferedPanel1.Name = "doubleBufferedPanel1";
+			this.doubleBufferedPanel1.Size = new System.Drawing.Size(398, 299);
+			this.doubleBufferedPanel1.TabIndex = 1;
+			this.doubleBufferedPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.doubleBufferedPanel1_Paint);
+			this.doubleBufferedPanel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.doubleBufferedPanel1_MouseClick);
 			// 
 			// FrameControl
 			// 

@@ -16,6 +16,14 @@ namespace ChasmViz
 		int xIndent = 32;
 		int yIndent = 32;
 
+		//[CategoryAttribute("Simulation"),
+		//DescriptionAttribute("TimeStep")]
+		//public float TimeStep
+		//{
+		//    get { return Globals.G.timeData.CurrentTime; }
+		//    set { Globals.G.timeData.CurrentTime = (int)value; Globals.G.mainForm.Refresh(); }
+		//}
+
 		// .fos file info
 		private float fos;
 		[CategoryAttribute("Stability"),
@@ -96,6 +104,26 @@ namespace ChasmViz
 		{
 			get { return seismicity; }
 			set { seismicity = value; }
+		}
+
+		[CategoryAttribute("Simulation"),
+		DescriptionAttribute("Selected Cell")]
+		public float Cell
+		{
+			get
+			{
+				if (Globals.G.ValidCellSelection())
+				{
+					if (Globals.G.selectedGraph == FrameControl.GraphTypeEnum.Pressure)
+						return cells[Globals.G.selectedCellX, Globals.G.selectedCellY].poreWaterPressure;
+					else if (Globals.G.selectedGraph == FrameControl.GraphTypeEnum.Moisture)
+						return cells[Globals.G.selectedCellX, Globals.G.selectedCellY].moisture;
+					else if (Globals.G.selectedGraph == FrameControl.GraphTypeEnum.Soil)
+						return (float)cells[Globals.G.selectedCellX, Globals.G.selectedCellY].soilType;
+				}
+				return 0;
+			}
+			//			set { Globals.G.timeData.CurrentTime = (int)value; Globals.G.mainForm.Refresh(); }
 		}
 
 		public GridData(int w, int h)
@@ -226,11 +254,27 @@ namespace ChasmViz
 			return cellSize * xPos + xIndent;
 		}
 
+		public float InverseTransX(float xScreen, int cellSize)
+		{
+			// xscreen = cellSize * xPos + xIndent
+			// (xscreen - xIndent) / cellSize = xPos
+			return (xScreen - xIndent) / cellSize;
+		}
+
 		float TransY(float yPos, int cellSize)
 		{
 //			int cellSize = Globals.G.cellSize;
 			int graphHeight = height * cellSize;
 			return (graphHeight - cellSize * yPos) + yIndent;
+		}
+
+		public float InverseTransY(float yScreen, int cellSize)
+		{
+			// yScreen = ((height*cellsize) - (cellSize*yPos) + yIndent
+			// yScreen - yIndent = cellSize * (height - yPos)
+			// (yScreen - yIndent) / cellSize = height - yPos;
+			// yPos = height - ((yScreen - yIndent) / cellSize)
+			return height - ((yScreen - yIndent) / cellSize);
 		}
 
 		float TransScale(float sc, int cellSize)
@@ -316,6 +360,12 @@ namespace ChasmViz
 			}
 			DrawDangerCircle(g, graphStyle);
 			DrawWaterTable(g, graphStyle);
+			if (Globals.G.selectedGraph == FrameControl.GraphTypeEnum.Pressure)
+				g.DrawRectangle(Pens.White, TransX(Globals.G.selectedCellX, cellSize),
+					TransY(Globals.G.selectedCellY, cellSize) - cellSize, cellSize, cellSize);
+			else
+				g.DrawRectangle(Pens.Gray, TransX(Globals.G.selectedCellX, cellSize),
+					TransY(Globals.G.selectedCellY, cellSize) - cellSize, cellSize, cellSize);
 		}
 
 		void DrawCircle(Graphics g, float x, float y, float rad)
@@ -329,7 +379,6 @@ namespace ChasmViz
 			int cellSpacing = -1;
 			if (graphStyle.spacing) cellSpacing = 0;
 			DrawStringBold(g, "Moisture Content", xIndent, 0, Color.Black);
-			DrawGraphLines(g, graphStyle);
 			if (graphStyle.renderGrid && !graphStyle.gridInFront) DrawGrid(g, graphStyle);
 			float minMoisture = float.MaxValue;
 			float maxMoisture = float.MinValue;
@@ -353,6 +402,7 @@ namespace ChasmViz
 				}
 			}
 			if (graphStyle.renderGrid && graphStyle.gridInFront) DrawGrid(g, graphStyle);
+			DrawGraphLines(g, graphStyle);
 			// Draw color legend
 			//int index = 0;
 			float normalizeMin = minMoisture;
@@ -379,6 +429,12 @@ namespace ChasmViz
 			}
 			DrawDangerCircle(g, graphStyle);
 			DrawWaterTable(g, graphStyle);
+			if (Globals.G.selectedGraph == FrameControl.GraphTypeEnum.Moisture)
+				g.DrawRectangle(Pens.White, TransX(Globals.G.selectedCellX, cellSize),
+					TransY(Globals.G.selectedCellY, cellSize) - cellSize, cellSize, cellSize);
+			else
+				g.DrawRectangle(Pens.Gray, TransX(Globals.G.selectedCellX, cellSize),
+					TransY(Globals.G.selectedCellY, cellSize) - cellSize, cellSize, cellSize);
 		}
 
 		public void DrawSoilType(Graphics g, GraphStyle graphStyle)
@@ -387,7 +443,6 @@ namespace ChasmViz
 			int cellSpacing = -1;
 			if (graphStyle.spacing) cellSpacing = 0;
 			DrawStringBold(g, "Soil Type", xIndent, 0, Color.Black);
-			DrawGraphLines(g, graphStyle);
 			Color[] soilPalette = new Color[6];
 			soilPalette[0] = Color.FromArgb(220, 195, 110);	// as defined by CHASM_notes1.doc from Liz
 			soilPalette[1] = Color.FromArgb(195, 160, 94);
@@ -416,6 +471,7 @@ namespace ChasmViz
 				}
 			}
 			if (graphStyle.renderGrid && graphStyle.gridInFront) DrawGrid(g, graphStyle);
+			DrawGraphLines(g, graphStyle);
 			for (int index = 0; index < 6; index++)
 			{
 				int palIndex = index;
@@ -430,6 +486,12 @@ namespace ChasmViz
 			}
 			DrawDangerCircle(g, graphStyle);
 			DrawWaterTable(g, graphStyle);
+			if (Globals.G.selectedGraph == FrameControl.GraphTypeEnum.Soil)
+				g.DrawRectangle(Pens.White, TransX(Globals.G.selectedCellX, cellSize),
+					TransY(Globals.G.selectedCellY, cellSize) - cellSize, cellSize, cellSize);
+			else
+				g.DrawRectangle(Pens.Gray, TransX(Globals.G.selectedCellX, cellSize),
+					TransY(Globals.G.selectedCellY, cellSize) - cellSize, cellSize, cellSize);
 		}
 
 		void DrawGrid(Graphics g, GraphStyle graphStyle)
