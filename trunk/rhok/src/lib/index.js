@@ -80,7 +80,6 @@ function renderSoil(){
   var data = buildStratas(parentNode, points_size);
   setSoilOffsets(data);
   updateGraph();
-  
 }
 
 function renderWaterTable(){
