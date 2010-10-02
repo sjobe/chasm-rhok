@@ -26,7 +26,7 @@
         <div class="clear"></div>
       </div>
       <div id="tab-pages">
-        <form action="chasm.php" method="post">
+        <form action="process.php" method="post">
           <div class="tab-page selected info">
             <p>Enter the slope name and location</p>
             <table>
@@ -173,8 +173,8 @@
       -->
     </div>
     <div id = "graph-col">
-      <div id="graph" style="height:460px;">
-      	<div id="box" class="jxgbox" style="position:relative;width:460px; height:460px;">
+      <div id="graph">
+      	<div id="box" class="jxgbox">
         <div style="position:absolute; left:-15px; top: 220px; -webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg); -o-transform: rotate(-90deg);filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);font-size:0.8em; font-weight:bold;">Meters</div>
 		<div style="position:absolute; left: 200px; bottom: 0px;font-size:0.8em; font-weight:bold;">Meters</div>
 		<img src="img/legend.png" style="width:75px; position:absolute; top: 10px; right: 10px;"/>
@@ -183,8 +183,8 @@
 
 
       </div>
-      <!--<div id="compute-button-holder"><input href="done.html" id="compute-button" class="button" type="submit" value="Create"></div>-->
-      <div id="compute-button-holder"><a href="done.html" id="compute-button" class="button">Create</a></div>
+      <div id="compute-button-holder"><input id="compute-button" class="button" type="submit" value="Create"></div>
+      <!--<div id="compute-button-holder"><a href="done.html" id="compute-button" class="button">Create</a></div>-->
     </div>
     <div class="clear"></div>
   </div>
