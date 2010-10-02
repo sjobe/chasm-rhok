@@ -2,7 +2,73 @@
 <body>
 <pre>
 <?php
+class Chasm_Input_Parser
+{
 
+    const NAME = "info_name";
+    const LATITUDE = "info_latitude";
+    const LONGITUDE = "info_long";
+
+    const PROFILE_HEIGHT = "profile_height";
+    const PROFILE_LENGTH = "profile_length";
+    const PROFILE_ANGLE = "profile_angle";
+    
+    const SOIL_TYPE = "soil_type_strata";
+    const SOIL_C ="soil_c_strata";
+    const SOIL_PHI = "soil_phi_strata";
+    const SOIL_KS = "soil_ks_strata";
+    const SOIL_DEPTH = "soil_depth_stata";
+    
+    const WATER_DEPTH = "water_x";
+    const WATER_UPSLOPE_RECHARGE = "water_upslope_recharge";
+    
+    const RAIN_FREQUENCY = "rain_frequency";
+    const RAIN_DURATION = "rain_duration";
+    const RAIN_VOLUME = "rain_volume";
+    
+    public static function parseProfile()
+    {
+        $profile = array();
+        $idx = 1;
+        
+        
+        while ( _checkProfileInput( $idx ) )
+        {
+           
+            $idx++;
+        }
+    }
+    
+    private static function _createProfileLine( $idx )
+    {
+        // TODO: utilize autocomplete functions to fill in missing data
+        
+        return array( );
+    }
+    
+    private static function _checkProfileInput( $idx )
+    {
+        // Count how many pieces of info we have. Need at least 2 out of 3
+        $count = 0;
+        
+        if ( $_REQUEST(PROFILE_HEIGHT . $idx) )
+        {
+            $count++;
+        }
+        
+        if ( $_REQUEST(PROFILE_LENGTH . $idx) )
+        {
+            $count++;
+        }
+        
+        if ( $_REQUEST(PROFILE_ANGLE . $idx) )
+        {
+            $count++;
+        }
+               
+        return $count >= 2;
+    }
+}
 /*
 Array
 (
