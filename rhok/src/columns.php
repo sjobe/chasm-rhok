@@ -87,6 +87,10 @@ function generateXYPoints( $data ) {
 	return $xyPoints;
 }
 
+function generateLayerXYPoints( $data, $layer ) {
+    // TODO!!
+}
+
 function testXYPoints() {
 	$testData = array(	array(H => 3, 	L => 5, 	THETA => 36.869897645844021296855612559093),
 						array(H => 10, 	L => 26,    THETA => 22.61986494804042617294901087668),
@@ -155,7 +159,7 @@ function generateFile( $cells, $water_columns ) {
 	echo "</pre>";
 }
 
-function generateWater( $width, $water ) {
+function generateWaterColumns( $width, $water ) {
 
 	$results = array();
 	
@@ -337,9 +341,6 @@ function findSegment( $x_coord, $line_segments ) {
 	}
 }
 
-function convertHLTtoXY( $hlt ) {
-}
-
 function testWater() {
 	$water =	array(
 					array(0, 25),
@@ -348,7 +349,7 @@ function testWater() {
 					array(52, 5),
 					array(64, 0)				
 				);
-	$sat = generateWater( 64, $water );	
+	$sat = generateWaterColumns( 64, $water );	
 }
 
 function testGenerateColumn() {
@@ -628,7 +629,7 @@ function testGenerateCells() {
 	
 	echo "<hr/>";
 	*/
-	$water_columns = generateWater( 64, $water );
+	$water_columns = generateWaterColumns( 64, $water );
 	generateFile( $cells, $water_columns );
 }
 testXYPoints();
