@@ -1,13 +1,13 @@
 <?php
 
 // Constant for Height
-define("H", 0);
+define("H", "height");
 
 // Constant for Length
-define("L", 1);
+define("L", "length");
 
 // Constant for Theta
-define("THETA", 2);
+define("THETA", "angle");
 
 // Constant for X coordinate
 define("X", 0);
@@ -88,10 +88,10 @@ function generateXYPoints( $data ) {
 }
 
 function testXYPoints() {
-	$testData = array(	array(3, 	5, 	36.869897645844021296855612559093),
-						array(10, 	26, 22.61986494804042617294901087668),
-						array(7,		25,	16.260204708311957406288774881813),
-						array(5,		13,	22.61986494804042617294901087668)	);
+	$testData = array(	array(H => 3, 	L => 5, 	THETA => 36.869897645844021296855612559093),
+						array(H => 10, 	L => 26,    THETA => 22.61986494804042617294901087668),
+						array(H => 7,	L => 25,	THETA => 16.260204708311957406288774881813),
+						array(H => 5,	L => 13,    THETA => 22.61986494804042617294901087668)	);
 						
 	$expectedValues = array( 	array(0, 	25),
 									array(4,	22),
@@ -631,6 +631,7 @@ function testGenerateCells() {
 	$water_columns = generateWater( 64, $water );
 	generateFile( $cells, $water_columns );
 }
+testXYPoints();
 /*
 testFindSegment();
 testIsAboveLine();

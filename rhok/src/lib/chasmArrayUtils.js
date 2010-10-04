@@ -1,114 +1,44 @@
-<!-- buildProfile         -->
-<!-- heightPrefix: String -->
-<!-- lengthPrefix: String -->
-<!-- thetaPrefix: String  -->
-<!-- parentNode: DOM Node -->
-
-<!-- Responsible for creating the profile data from fields -->
-function buildProfile(heightPrefix, lengthPrefix, thetaPrefix, parentNode){
-  var data;
-  var heightArray = findChildValuesWithNamePrefixFromInputTypes(heightPrefix, parentNode);
-  var lengthArray = findChildValuesWithNamePrefixFromInputTypes(lengthPrefix, parentNode);
-  var thetaArray = findChildValuesWithNamePrefixFromInputTypes(thetaPrefix, parentNode);
-  if(heightArray != null && lengthArray != null && thetaArray != null){
-    if((heightArray.length == lengthArray.length) && (lengthArray.length == thetaArray.length)){    
-      data = new Array(heightArray.length);
-      for(var i = 0; i < data.length; i++){
-        data[i] = new Array(3);
-        data[i][0] = eval(heightArray[i]);
-        data[i][1] = eval(lengthArray[i])
-        data[i][2] = eval(thetaArray[i]);
-      }
+function buildSoilStrataArray()
+{
+    var data = new Array();
+    for (var strataIdx = 0; strataIdx < num_strata; strataIdx++)
+    {
+        var strata = new Array();
+        for (var idx = 0; idx < num_profile_segments + 1; idx++)
+        {
+            strata.push(parseInt($("#soilDepth" + idx + "\\.strata" + strataIdx + "\\:depth").val()));
+        }
+        if ( strata.length === num_profile_segments + 1 )
+        {
+            data[strataIdx] = strata;
+        }
     }
-  }
     
-  return data;
+    return data;
 }
 
-function buildDepth(depthPrefix, parentNode){
-  var depthArray = findChildValuesWithNamePrefixFromInputTypes(depthPrefix, parentNode);
-  return depthArray;
-}
-
-function buildStratas(parentNode, size){
-  var data = new Array();
-  var stratas = new Array();
-  stratas[0] = buildDepth("soil_strata1", parentNode);
-  stratas[1] = buildDepth("soil_strata2", parentNode);
-  stratas[2] = buildDepth("soil_strata3", parentNode);
-  stratas[3] = buildDepth("soil_strata4", parentNode);
-  if(stratas[0]){
-    data[0] = stratas[0];
-  }
-  if(stratas[1]){
-    data[1] = stratas[1];
-  }
-  if(stratas[2]){
-    data[2] = stratas[2];
-  }
-  if(stratas[3]){
-    data[3] = stratas[3];
-  }
-  return data;
-}
-
-<!-- findChildValueWithNamePrefix -->
-<!-- prefix: String               -->
-<!-- parentNode: DOM Node         -->
-
-<!-- Responsible for finding the first value it runs into that matches a certain name prefix -->
-<!-- Assumption: Children of a node with the prefix will not have a prefixed node            -->
-function findChildValueWithNamePrefix(prefix, parentNode){
-  if(parentNode){
-    for(var i = 0; i < parentNode.childNodes.length; i++){
-      var child = parentNode.childNodes[i];    
-      var nameAttribute = child.name;
-      if(nameAttribute){
-        if(nameAttribute.indexOf(prefix) == 0){
-          return child.value;
-        } else {
-          if(child.childNodes()){
-            var val = findChildValueWithNamePrefix(prefix, child);
-            if(val != null){
-              return val;
-            }
-          }
-        }
-      } else {
-        if(child.childNodes){
-          var val = findChildValueWithNamePrefix(prefix, child);
-          if(val != null){
-            return val;
-          }
-        }
-      }
-    }  
-  }
-}
-
-<!-- findChildValuesWithNamePrefixFromInputTypes -->
-<!-- prefix: String               -->
-<!-- parentNode: DOM Node         -->
-
-<!-- Responsible for finding all the values it runs into that matches a certain name prefix -->
-function findChildValuesWithNamePrefixFromInputTypes(prefix, parentNode){
-  var inputNodes = parentNode.getElementsByTagName("INPUT");
-  var valuesArray = new Array();
-  var count = 0;
-  for(var i = 0; i < inputNodes.length; i++){
-    var nameAttribute = inputNodes[i].name;
-    if(nameAttribute){
-      if(nameAttribute.indexOf(prefix) == 0){
-        if(inputNodes[i].value != ''){
-          valuesArray[count] = inputNodes[i].value;
-          count++;
-        }
-      }
+function buildProfileArray()
+{
+    var data = new Array(num_profile_segments);
+    for (var idx = 0; idx < num_profile_segments; idx++)
+    {
+        var row = new Array(3);
+        row[0] = parseInt($("#profile" + idx + "\\:height").val());
+        row[1] = parseInt($("#profile" + idx + "\\:length").val());
+        row[2] = parseInt($("#profile" + idx + "\\:angle").val());
+        data[idx] = row;
     }
-  }
-  if(valuesArray.length > 0){
-    return valuesArray;
-  }else{
-    return null;
-  }
+    
+    return data;
+}
+
+function buildWaterArray()
+{
+    var data =  new Array(num_profile_segments);
+    for (var idx = 0; idx < num_profile_segments + 1; idx++)
+    {
+        data[idx] = parseInt($("#waterDepth" + idx +"\\:depth").val());
+    }
+    
+    return data;
 }

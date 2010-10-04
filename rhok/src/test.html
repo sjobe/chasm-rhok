@@ -1,50 +1,58 @@
 <html>
 <body>
 <form action="process.php" method="post">
-	<input name="info_name" value=""/>
+	<input id="info_name" name="info_name" value=""/>
 	<input name="info_latitude" value=""/>
 	<input name="info_long" value=""/>
-	<input name="profile_height_1" value="35"/>
-	<input name="profile_length_1" value="20"/>
-	<input name="profile_angle_1" value="54"/>
-	<input name="profile_height_2" value="20"/>
-	<input name="profile_length_2" value="15"/>
-	<input name="profile_angle_2" value="15"/>
-	<input name="soil_type_strata1" value="1"/>
-	<input name="soil_type_strata2" value="2"/>
-	<input name="soil_type_strata3" value=""/>
-	<input name="soil_type_strata4" value=""/>
-	<input name="soil_strata1_c" value="50"/>
-	<input name="soil_strata2_c" value="40"/>
-	<input name="soil_strata3_c" value=""/>
-	<input name="soil_strata4_c" value=""/>
-	<input name="soil_strata1_phi" value="60"/>
-	<input name="soil_strata2_phi" value="50"/>
-	<input name="soil_strata3_phi" value=""/>
-	<input name="soil_strata4_phi" value=""/>
-	<input name="soil_strata1_ks" value="1.00E-09"/>
-	<input name="soil_strata2_ks" value="1.00E-08"/>
-	<input name="soil_strata3_ks" value=""/>
-	<input name="soil_strata4_ks" value=""/>
-	<input name="soil_strata1_x1" value="10"/>
-	<input name="soil_strata2_x1" value="25"/>
-	<input name="soil_strata3_x1" value=""/>
-	<input name="soil_strata4_x1" value=""/>
-	<input name="soil_strata1_x2" value="5"/>
-	<input name="soil_strata2_x2" value="12"/>
-	<input name="soil_strata3_x2" value=""/>
-	<input name="soil_strata4_x2" value=""/>
-	<input name="soil_strata1_x3" value="0"/>
-	<input name="soil_strata2_x3" value="0"/>
-	<input name="soil_strata3_x3" value=""/>
-	<input name="soil_strata4_x3" value=""/>
-	<input name="water_x1" value="5"/>
-	<input name="water_x2" value="10"/>
-	<input name="water_x3" value="0"/>
+	<input name="profile[0][height]" value="3"/>
+	<input name="profile[0][length]" value="5"/>
+	<input name="profile[0][angle]" value="36.869897645844021296855612559093"/>
+	<input name="profile[1][height]" value="10"/>
+	<input name="profile[1][length]" value="26"/>
+	<input name="profile[1][angle]" value="22.61986494804042617294901087668"/>
+	<input name="profile[2][height]" value="7"/>
+	<input name="profile[2][length]" value="25"/>
+	<input name="profile[2][angle]" value="16.260204708311957406288774881813"/>
+	<input name="profile[3][height]" value="5"/>
+	<input name="profile[3][length]" value="13"/>
+	<input name="profile[3][angle]" value="22.61986494804042617294901087668"/>
+	<input name="soil_strata[0][type]" value="1"/>
+	<input name="soil_strata[1][type]" value="2"/>
+	<input name="soil_strata[2][type]" value=""/>
+	<input name="soil_strata[3][type]" value=""/>
+    
+    
+	<input name="soil_strata[0][c]" value="50"/>
+	<input name="soil_strata[1][c]" value="40"/>
+	<input name="soil_strata[2][c]" value=""/>
+	<input name="soil_strata[3][c]" value=""/>
+	<input name="soil_strata[0][phi]" value="60"/>
+	<input name="soil_strata[1][phi]" value="50"/>
+	<input name="soil_strata[2][phi]" value=""/>
+	<input name="soil_strata[3][phi]" value=""/>
+	<input name="soil_strata[0][ks]" value="1.00E-09"/>
+	<input name="soil_strata[1][ks]" value="1.00E-08"/>
+	<input name="soil_strata[2][ks]" value=""/>
+	<input name="soil_strata[3][ks]" value=""/>
+	<input name="soil_strata[0][depth][]" value="10"/>
+	<input name="soil_strata[1][depth][]" value="25"/>
+	<input name="soil_strata[2][depth][]" value=""/>
+	<input name="soil_strata[3][depth][]" value=""/>
+	<input name="soil_strata[0][depth][]" value="5"/>
+	<input name="soil_strata[1][depth][]" value="12"/>
+	<input name="soil_strata[2][depth][]" value=""/>
+	<input name="soil_strata[3][depth][]" value=""/>
+	<input name="soil_strata[0][depth][]" value="0"/>
+	<input name="soil_strata[1][depth][]" value="0"/>
+	<input name="soil_strata[2][depth][]" value=""/>
+	<input name="soil_strata[3][depth][]" value=""/>
+	<input name="water_depth[]" value="5"/>
+	<input name="water_depth[]" value="10"/>
+	<input name="water_depth[]" value="0"/>
 	<input name="water_upslope_recharge" value=""/>
-	<input name="rain_frequency_1" value="5"/>
-	<input name="rain_duration_1" value="2"/>
-	<input name="rain_volume_1" value="81.28"/>
+	<input name="rain[0][frequency]" value="5"/>
+	<input name="rain[0][duration]" value="2"/>
+	<input name="rain[0][volume]" value="81.28"/>
 	<input type="submit"/>
 </form>
 </body>
