@@ -176,6 +176,7 @@ function addRainfallRowHtml()
 		var dur = $("#rain" + num + "\\:duration").val();
 		if ("" !== freq && "" !== dur ){
 			$("#rain" + num + "\\:volume").val(getTotalRainVolumeInMM(freq,dur));
+            $("#rain" + num + "\\:volume").addClass("computed");
 		}
 	});	
     num_rain_rows++;
@@ -313,7 +314,10 @@ $(document).ready(function(){
 		var sg = getSoilGrade($(this).val());
 		var num = $(this).attr("name").charAt($(this).attr("name").indexOf("]")-1);
 		$("#soilStrata" + num + "\\:c").val(sg.c);
+		$("#soilStrata" + num + "\\:c").addClass("computed");
         $("#soilStrata" + num + "\\:phi").val(sg.phi);
+        $("#soilStrata" + num + "\\:phi").addClass("computed");
         $("#soilStrata" + num + "\\:ks").val(sg.ksat);
+        $("#soilStrata" + num + "\\:ks").addClass("computed");
 	});
 });

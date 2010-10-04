@@ -4,24 +4,25 @@
 class Chasm_Input_Parser
 {
 
-    const NAME = "info_name";
-    const LATITUDE = "info_latitude";
-    const LONGITUDE = "info_long";
+    const INFO = "info";
+    const NAME = "name";
+    const LATITUDE = "latitude";
+    const LONGITUDE = "longitude";
 
     const PROFILE = "profile";
     const PROFILE_HEIGHT = "height";
     const PROFILE_LENGTH = "length";
     const PROFILE_ANGLE = "angle";
     
-    const SOIL = "soil_strata";
+    const SOIL = "soilStrata";
     const SOIL_TYPE = "type";
     const SOIL_C ="c";
     const SOIL_PHI = "phi";
     const SOIL_KS = "ks";
     const SOIL_DEPTH = "depth";
     
-    const WATER_DEPTH = "water_depth";
-    const WATER_UPSLOPE_RECHARGE = "water_upslope_recharge";
+    const WATER_DEPTH = "waterDepth";
+    const WATER_UPSLOPE_RECHARGE = "waterUpslopeRecharge";
     
     const RAIN = "rain";
     const RAIN_FREQUENCY = "frequency";
