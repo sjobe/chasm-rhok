@@ -30,12 +30,18 @@ function autocomplete( h_id, l_id, theta_id ) {
 	var theta = document.getElementById(theta_id).value;
 	
 	if ( l && theta && !h) {
+        alert("missing height");
 		document.getElementById(h_id).value = getH( l, theta );
 	} else if ( h && theta && !l ) {
+        alert("missing length");
 		document.getElementById(l_id).value = getL( h, theta );
 	} else if( h && l && !theta ) {
+        alert("missing theta");
 		document.getElementById(theta_id).value = getTheta( h, l );
-	}
+	} else {
+        alert("missing stuff");
+    }
+    
 }
 
 // Get the height value given length and theta (in degrees)
