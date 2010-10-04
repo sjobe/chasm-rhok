@@ -125,14 +125,32 @@ function autoCompleteProfileRow( idx )
     var h = parseInt($("#profile" + idx + "\\:height").val());
 	var l = parseInt($("#profile" + idx + "\\:length").val());
 	var theta = parseInt($("#profile" + idx + "\\:angle").val());
-	
-	if ( l && theta && !h) {
+
+    $("#profile" + idx + "\\:height").removeClass("computed");
+    $("#profile" + idx + "\\:height").removeClass("error");
+    $("#profile" + idx + "\\:length").removeClass("computed");
+    $("#profile" + idx + "\\:length").removeClass("error");
+    $("#profile" + idx + "\\:angle").removeClass("computed");
+    $("#profile" + idx + "\\:angle").removeClass("error");
+    
+    if ( h && l && theta && theta !== getTheta( h, l ) ) 
+    {
+        $("#profile" + idx + "\\:height").addClass("error");
+        $("#profile" + idx + "\\:length").addClass("error");
+        $("#profile" + idx + "\\:angle").addClass("error");
+	}
+    else if ( l && theta && !h )
+    {
  		$("#profile" + idx + "\\:height").val(getH( l, theta ));
         $("#profile" + idx + "\\:height").addClass("computed");
-	} else if ( h && theta && !l ) {
+	}
+    else if ( h && theta && !l )
+    {
  		$("#profile" + idx + "\\:length").val(getL( h, theta ));
         $("#profile" + idx + "\\:length").addClass("computed");
-	} else if( h && l && !theta ) {
+	}
+    else if( h && l && !theta )
+    {
  		$("#profile" + idx + "\\:angle").val(getTheta( h, l ));
         $("#profile" + idx + "\\:angle").addClass("computed");
 	}

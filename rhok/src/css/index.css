@@ -11,6 +11,14 @@ body {
   background: #fff;  
 }
 
+.error {
+    background-color: #FA5858;
+}
+
+.computed {
+    background-color: yellow;
+}
+
 #page {
   width: 1000px;
   margin: 0 auto;
@@ -70,10 +78,6 @@ body {
   -webkit-border-radius: 5px 5px;
   border: 1px solid #000;
   background-image: url(../img/gradient_d.png);
-}
-
-.computed {
-    background-color: yellow;
 }
 
 #compute-button:hover {
