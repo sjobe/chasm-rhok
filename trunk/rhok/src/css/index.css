@@ -198,7 +198,7 @@ th {
   padding:10px 0px;
 }
 
-.info input[type=text] {
+#infoData input {
   margin:10px;
 }
 
@@ -213,7 +213,7 @@ th {
 
 .profile input {
   width:80px;
-  margin-right:50px
+  margin-right:50px;
 }
 
 .add-profile-segment {
