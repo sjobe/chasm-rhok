@@ -72,6 +72,10 @@ body {
   background-image: url(../img/gradient_d.png);
 }
 
+.computed {
+    background-color: yellow;
+}
+
 #compute-button:hover {
   background-image: url(../img/gradient_l.png);
   color: #000;
