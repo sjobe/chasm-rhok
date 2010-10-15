@@ -12,11 +12,15 @@ body {
 }
 
 .error {
-    background-color: #FA5858;
+    background-color: #FAA;
+}
+
+.warn {
+    background-color: #FFA;
 }
 
 .computed {
-    background-color: yellow;
+    background-color: #DDD;
 }
 
 #page {
