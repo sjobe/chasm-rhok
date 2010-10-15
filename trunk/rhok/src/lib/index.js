@@ -96,11 +96,10 @@ function updateNumProfileSegmentsDisplay()
 
 function addSegmentRow()
 {
-    var elem = getNextId();
-    $("#profile-data").append(profile_segment_html.replace(/#ID#/g, elem));
-    addSoilDepthRow(elem);
-    addWaterRowHtml(elem);    
-    updateNumProfileSegmentsDisplay(elem);    
+    $("#profile-data").append(profile_segment_html.replace(/#ID#/g, num_profile_segments++));
+    addSoilDepthRow();
+    addWaterRowHtml();    
+    updateNumProfileSegmentsDisplay();    
     
     $("#profile-data * input").change(function(){
         var elem = $(this).attr("id").split(":", 1);
