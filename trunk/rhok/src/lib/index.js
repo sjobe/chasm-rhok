@@ -96,7 +96,7 @@ function updateNumProfileSegmentsDisplay()
 
 function addSegmentRow()
 {
-    $("#profile-data").append(profile_segment_html.replace(/#ID#/g, num_profile_segments++));
+    $("#profile-data").append(profile_segment_html.replace(/#ID#/g, num_profile_segments));
     addSoilDepthRow();
     addWaterRowHtml();    
     updateNumProfileSegmentsDisplay();    
