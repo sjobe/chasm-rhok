@@ -89,6 +89,20 @@ var rainfall_row_html =
 + "</tr>"
 ;
 
+var counter=0;
+function getNextElemId() 
+{
+    var idx = counter++;
+    var elem = "";
+
+    while  ( idx - 26 > 0 ) {
+        elem += "A";
+        idx -= 26;
+    } 
+    elem = elem + String.fromCharCode( 65 + idx % 26);
+    return elem;
+}
+
 function updateNumProfileSegmentsDisplay()
 {
     $("#num-profile-segments").text(num_profile_segments);
@@ -96,6 +110,7 @@ function updateNumProfileSegmentsDisplay()
 
 function addSegmentRow()
 {
+    var elem = getNextElemId();
     $("#profile-data").append(profile_segment_html.replace(/#ID#/g, num_profile_segments));
     addSoilDepthRow();
     addWaterRowHtml();    
@@ -190,12 +205,12 @@ function addSoilDepthRow()
 {
 	if( 0 === num_profile_segments)
     {
-		$("#soil-depths").after(soil_depth_html.replace(/#ID#/g, "0"));
-		$(".soil-depth").after(soil_depth_html.replace(/#ID#/g, "1"));
+		$("#soil-tbody").append(soil_depth_html.replace(/#ID#/g, "0"));
+		$("#soil-tbody").append(soil_depth_html.replace(/#ID#/g, "1"));
 	}
     else
     {
-		$(".soil-depth:last").after(soil_depth_html.replace(/#ID#/g, num_profile_segments + 1));
+		$("#soil-tbody").append(soil_depth_html.replace(/#ID#/g, num_profile_segments + 1));
 	}
 }
 
@@ -203,12 +218,12 @@ function addWaterRowHtml()
 {
 	if( 0 === num_profile_segments )
     {
-		$(".water table").append(water_row_html.replace(/#ID#/g, "0"));
-		$(".water table").append(water_row_html.replace(/#ID#/g, "1"));
+		$("#water-tbody").append(water_row_html.replace(/#ID#/g, "0"));
+		$("#water-tbody").append(water_row_html.replace(/#ID#/g, "1"));
 	}
     else
     {
-		$(".water table").append(water_row_html.replace(/#ID#/g, num_profile_segments + 1));
+		$("#water-tbody").append(water_row_html.replace(/#ID#/g, num_profile_segments + 1));
 	}
 }
 
