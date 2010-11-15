@@ -13,8 +13,11 @@ var /*THIS.*/profile_segment_html =
 + "<td class=\"angle\">"
 + "<input id=\"profile#ID#:angle\" name=\"profile[#ID#][angle]\"/>"
 + "</td>"
++ "<td class=\"reset-segment\">"
++ "<a id=\"profile#ID#:reset\" title=\"Reset\" href=\"#\">o</a>"
++ "</td>"
 + "<td class=\"delete-segment\">"
-+ "<a id=\"profile#ID#:delete\" href=\"#\">x</a>"
++ "<a id=\"profile#ID#:delete\" title=\"Delete\" href=\"#\">x</a>"
 + "</td>"
 + "</tr>"
 ;
@@ -134,6 +137,11 @@ function addSegmentRow()
         /*THIS.*/deleteSegment(num);
     });
 
+    $("#profile"+/*THIS.*/num_profile_segments+"\\:reset").click(function(){
+        var num = parseInt($(this).attr("id").charAt($(this).attr("id").indexOf(":")-1));
+        /*THIS.*/resetSegment(num);
+    });
+    
     /*THIS.*/num_profile_segments++;
     /*THIS.*/updateNumProfileSegmentsDisplay();
 }
@@ -362,6 +370,20 @@ function deleteSegment(id){
     /*THIS.*/render();
 }
 
+function resetSegment(id) {
+	
+    $("#profile"+id+"\\:height").val("");
+	$("#profile"+id+"\\:angle").val("");
+	$("#profile"+id+"\\:length").val("");
+    $("#profile"+id+ "\\:height").removeClass("computed");
+    $("#profile"+id+ "\\:height").removeClass("error");
+    $("#profile"+id+ "\\:length").removeClass("computed");
+    $("#profile"+id+ "\\:length").removeClass("error");
+    $("#profile"+id+ "\\:angle").removeClass("computed");
+    $("#profile"+id+ "\\:angle").removeClass("error");
+	/*THIS.*/render();
+}
+
 $(document).ready(function(){
     /*THIS.*/updateNumProfileSegmentsDisplay();
     $("#tabs a").click(function(){
@@ -392,5 +414,15 @@ $(document).ready(function(){
         $("#" + elem + "\\:phi").addClass("computed");
         $("#" + elem + "\\:ks").val(sg.ksat);
         $("#" + elem + "\\:ks").addClass("computed");
+	});
+	
+	$("#soilStrata\\.type\\:c input").change(function() {
+		$(this).removeClass("computed");
+	});
+	$("#soilStrata\\.type\\:phi input").change(function() {
+		$(this).removeClass("computed");
+	});
+	$("#soilStrata\\.type\\:ks input").change(function() {
+		$(this).removeClass("computed");
 	});
 });
