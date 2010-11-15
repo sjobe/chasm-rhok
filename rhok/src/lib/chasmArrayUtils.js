@@ -1,14 +1,14 @@
 function buildSoilStrataArray()
 {
     var data = new Array();
-    for (var strataIdx = 0; strataIdx < num_strata; strataIdx++)
+    for (var strataIdx = 0; strataIdx < /*INDEX.*/num_strata; strataIdx++)
     {
         var strata = new Array();
-        for (var idx = 0; idx < num_profile_segments + 1; idx++)
+        for (var idx = 0; idx < /*INDEX.*/num_profile_segments + 1; idx++)
         {
             strata.push(parseInt($("#soilDepth" + idx + "\\.strata" + strataIdx + "\\:depth").val()));
         }
-        if ( strata.length === num_profile_segments + 1 )
+        if ( strata.length === /*INDEX.*/num_profile_segments + 1 )
         {
             data[strataIdx] = strata;
         }
@@ -19,8 +19,8 @@ function buildSoilStrataArray()
 
 function buildProfileArray()
 {
-    var data = new Array(num_profile_segments);
-    for (var idx = 0; idx < num_profile_segments; idx++)
+    var data = new Array(/*INDEX.*/num_profile_segments);
+    for (var idx = 0; idx < /*INDEX.*/num_profile_segments; idx++)
     {
         var row = new Array(3);
         row[0] = parseInt($("#profile" + idx + "\\:height").val());
@@ -34,8 +34,8 @@ function buildProfileArray()
 
 function buildWaterArray()
 {
-    var data =  new Array(num_profile_segments);
-    for (var idx = 0; idx < num_profile_segments + 1; idx++)
+    var data =  new Array(/*INDEX.*/num_profile_segments);
+    for (var idx = 0; idx < /*INDEX.*/num_profile_segments + 1; idx++)
     {
         data[idx] = parseInt($("#waterDepth" + idx +"\\:depth").val());
     }

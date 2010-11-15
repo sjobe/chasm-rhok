@@ -1,4 +1,3 @@
-
 function SoilGrade(grade, c, phi, ksat) {
   this.grade = grade;
   this.c = c;

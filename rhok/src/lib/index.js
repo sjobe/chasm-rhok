@@ -1,8 +1,8 @@
-var num_profile_segments = 0;
-var num_rain_rows = 0;
-var num_strata = 4;
+var /*THIS.*/num_profile_segments = 0;
+var /*THIS.*/num_rain_rows = 0;
+var /*THIS.*/num_strata = 4;
 
-var profile_segment_html = 
+var /*THIS.*/profile_segment_html = 
 "<tr id=\"profile#ID#\">"
 + "<td class=\"height\">"
 + "<input id=\"profile#ID#:height\" name=\"profile[#ID#][height]\"/>"
@@ -19,7 +19,7 @@ var profile_segment_html =
 + "</tr>"
 ;
 
-var soil_depth_html = 
+var /*THIS.*/soil_depth_html = 
 "<tr class=\"soil-depth\" id=\"soilDepth#ID#\">"
 + "<th scope=\"row\" id=\"soilDepth#ID#:id\">x#ID#</th>"
 + "<td>"
@@ -37,7 +37,7 @@ var soil_depth_html =
 + "</tr>"
 ;
 
-var water_row_html = 
+var /*THIS.*/water_row_html = 
 "<tr class=\"water-row\" id=\"waterDepth#ID#\">"
 + "<th scope=\"row\" id=\"waterDepth#ID#:id\">x#ID#</th>"
 + "<td>"
@@ -46,7 +46,7 @@ var water_row_html =
 + "</tr>"
 ;
 
-var rainfall_duration_select_html = 
+var /*THIS.*/rainfall_duration_select_html = 
 "<select id=\"rain#ID#:duration\" name=\"rain[#ID#][duration]\">"
 + "<option value=\"\" selected=\"selected\"></option>"
 + "<option value=\"1\">1</option>"
@@ -61,7 +61,7 @@ var rainfall_duration_select_html =
 + "</select>"
 ;
 
-var rain_frequency_select_html = 
+var /*THIS.*/rain_frequency_select_html = 
 "<select id=\"rain#ID#:frequency\" name=\"rain[#ID#][frequency]\">"
 + "<option value=\"\" selected=\"selected\"></option>"
 + "<option value=\"5\">1 in 5</option>"
@@ -72,13 +72,13 @@ var rain_frequency_select_html =
 + "</select>"
 ;
 
-var rainfall_row_html =
+var /*THIS.*/rainfall_row_html =
 "<tr id=\"rain#ID#\">"
 + "<td>"
-+ rain_frequency_select_html
++ /*THIS.*/rain_frequency_select_html
 + "</td>"
 + " <td>"
-+ rainfall_duration_select_html
++ /*THIS.*/rainfall_duration_select_html
 + "</td>"
 + "<td>"
 + "<input id=\"rain#ID#:volume\" name=\"rain[#ID#][volume]\"/>"
@@ -89,10 +89,10 @@ var rainfall_row_html =
 + "</tr>"
 ;
 
-var counter=0;
-function getNextElemId() 
+var /*THIS.*/counter=0;
+function /*THIS.*/getNextElemId() 
 {
-    var idx = counter++;
+    var idx = /*THIS.*/counter++;
     var elem = "";
 
     while  ( idx - 26 > 0 ) {
@@ -105,49 +105,57 @@ function getNextElemId()
 
 function updateNumProfileSegmentsDisplay()
 {
-    $("#num-profile-segments").text(num_profile_segments);
+    $("#num-profile-segments").text(/*THIS.*/num_profile_segments);
 }
 
 function addSegmentRow()
 {
-    var elem = getNextElemId();
-    $("#profile-data").append(profile_segment_html.replace(/#ID#/g, num_profile_segments));
-    addSoilDepthRow();
-    addWaterRowHtml();    
-    updateNumProfileSegmentsDisplay();    
+
+    $("#profile"+(/*THIS.*/num_profile_segments -1)+"\\:delete").remove();
+    
+    var elem = /*THIS.*/getNextElemId();
+    $("#profile-data").append(/*THIS.*/profile_segment_html.replace(/#ID#/g, /*THIS.*/num_profile_segments));
+    /*THIS.*/addSoilDepthRow();
+    /*THIS.*/addWaterRowHtml();    
     
     $("#profile-data * input").change(function(){
         var elem = $(this).attr("id").split(":", 1);
-        autoCompleteProfileRow( elem );
+        /*THIS.*/autoCompleteProfileRow( $(this) );
         if ($("#" + elem + "\\:height").val() 
             && $("#" + elem + "\\:length").val() 
             && $("#" + elem + "\\:angle").val())
         {
-            render();
+            /*THIS.*/render();
         }
     });
     
-    $("#profile"+num_profile_segments+"\\:delete").click(function(){
+    $("#profile"+/*THIS.*/num_profile_segments+"\\:delete").click(function(){
         var num = parseInt($(this).attr("id").charAt($(this).attr("id").indexOf(":")-1));
-        deleteSegment(num);
+        /*THIS.*/deleteSegment(num);
     });
 
-    num_profile_segments++;
+    /*THIS.*/num_profile_segments++;
+    /*THIS.*/updateNumProfileSegmentsDisplay();
 }
 
-function autoCompleteProfileRow( id )
+function autoCompleteProfileRow( elemTag )
 {
-    var h = parseInt($("#" + id + "\\:height").val());
-	var l = parseInt($("#" + id + "\\:length").val());
-	var theta = parseInt($("#" + id + "\\:angle").val());
+
+	var elem = elemTag.attr( "id" ).split(":",1);
+
+	var h = parseInt( $("#" + elem + "\\:height").val() );
+	var l = parseInt( $("#" + elem + "\\:length").val() );
+	var theta = parseInt( $("#" + elem + "\\:angle").val() );
+
     var hasError = false;
     
-    $("#" + id + "\\:height").removeClass("computed");
-    $("#" + id + "\\:height").removeClass("error");
-    $("#" + id + "\\:length").removeClass("computed");
-    $("#" + id + "\\:length").removeClass("error");
-    $("#" + id + "\\:angle").removeClass("computed");
-    $("#" + id + "\\:angle").removeClass("error");
+    $("#" + elem + "\\:height").removeClass("computed");
+    $("#" + elem + "\\:height").removeClass("error");
+    $("#" + elem + "\\:length").removeClass("computed");
+    $("#" + elem + "\\:length").removeClass("error");
+    $("#" + elem + "\\:angle").removeClass("computed");
+    $("#" + elem + "\\:angle").removeClass("error");
+    
     
     if ( h && l && theta && theta !== getTheta( h, l ) ) 
     {
@@ -156,81 +164,81 @@ function autoCompleteProfileRow( id )
     else if ( l && theta && !h )
     {
         var calcH = getH( l, theta );
- 		$("#" + id + "\\:height").val( calcH );
+ 		$("#" + elem + "\\:height").val( calcH );
         if ( isNaN( calcH ) )
         {
             hasError = true;
         }
         else
         {
-            $("#" + id + "\\:height").addClass("computed");
+            $("#" + elem + "\\:height").addClass("computed");
         }
 	}
     else if ( h && theta && !l )
     {
         var calcL = getL( h, theta );
- 		$("#" + id + "\\:length").val( calcL );
+ 		$("#" + elem + "\\:length").val( calcL );
         if ( isNaN( calcL ) )
         {
             hasError  = true;
         }
         else
         {
-            $("#" + id + "\\:length").addClass("computed");
+            $("#" + elem + "\\:length").addClass("computed");
         }
 	}
     else if( h && l && !theta )
     {
         var calcTheta = getTheta( h, l );
- 		$("#" + id + "\\:angle").val( calcTheta );
+ 		$("#" + elem + "\\:angle").val( calcTheta );
         if (isNaN( calcTheta ) )
         {
             hasError = true;
         }
         else
         {
-            $("#" + id + "\\:angle").addClass("computed");
+            $("#" + elem + "\\:angle").addClass("computed");
         }
 	}
     
     if ( hasError )
     {
-        $("#" + id + "\\:height").addClass("error");
-        $("#" + id + "\\:length").addClass("error");
-        $("#" + id + "\\:angle").addClass("error");
+        $("#" + elem + "\\:height").addClass("error");
+        $("#" + elem + "\\:length").addClass("error");
+        $("#" + elem + "\\:angle").addClass("error");
 	}
 }
 
 function addSoilDepthRow()
 {
-	if( 0 === num_profile_segments)
+	if( 0 === /*THIS.*/num_profile_segments)
     {
-		$("#soil-tbody").append(soil_depth_html.replace(/#ID#/g, "0"));
-		$("#soil-tbody").append(soil_depth_html.replace(/#ID#/g, "1"));
+		$("#soil-tbody").append(/*THIS.*/soil_depth_html.replace(/#ID#/g, "0"));
+		$("#soil-tbody").append(/*THIS.*/soil_depth_html.replace(/#ID#/g, "1"));
 	}
     else
     {
-		$("#soil-tbody").append(soil_depth_html.replace(/#ID#/g, num_profile_segments + 1));
+		$("#soil-tbody").append(/*THIS.*/soil_depth_html.replace(/#ID#/g, /*THIS.*/num_profile_segments + 1));
 	}
 }
 
 function addWaterRowHtml()
 {
-	if( 0 === num_profile_segments )
+	if( 0 === /*THIS.*/num_profile_segments )
     {
-		$("#water-tbody").append(water_row_html.replace(/#ID#/g, "0"));
-		$("#water-tbody").append(water_row_html.replace(/#ID#/g, "1"));
+		$("#water-tbody").append(/*THIS.*/water_row_html.replace(/#ID#/g, "0"));
+		$("#water-tbody").append(/*THIS.*/water_row_html.replace(/#ID#/g, "1"));
 	}
     else
     {
-		$("#water-tbody").append(water_row_html.replace(/#ID#/g, num_profile_segments + 1));
+		$("#water-tbody").append(/*THIS.*/water_row_html.replace(/#ID#/g, /*THIS.*/num_profile_segments + 1));
 	}
 }
 
 function addRainfallRowHtml()
 {
-    var newId = num_rain_rows++;
-	$("#rain-data").append(rainfall_row_html.replace(/#ID#/g, newId));
+    var newId = /*THIS.*/num_rain_rows++;
+	$("#rain-data").append(/*THIS.*/rainfall_row_html.replace(/#ID#/g, newId));
 	$("#rain" + newId + " .delete-rainfall-row").click(function(){
 		$(this).parent().remove();
 	});
@@ -239,7 +247,7 @@ function addRainfallRowHtml()
 		var freq = $("#" + elem + "\\:frequency").val();
 		var dur = $("#" + elem + "\\:duration").val();
 		if ("" !== freq && "" !== dur ){
-			$("#" + elem + "\\:volume").val(getTotalRainVolumeInMM(freq,dur));
+			$("#" + elem + "\\:volume").val(/*RAINTABLE.*/getTotalRainVolumeInMM(freq,dur));
             $("#" + elem + "\\:volume").addClass("computed");
 		}
 	});	
@@ -273,39 +281,40 @@ function validate(evt, type)
 function render()
 {
     
-    renderProfile();
+    /*THIS.*/renderProfile();
     
-    renderSoil();
+    /*THIS.*/renderSoil();
     
-    renderWaterTable();
+    /*THIS.*/renderWaterTable();
     
-    updateGraph();
+    /*UI_GRAPH.*/updateGraph();
 }
 
 function renderProfile()
 {
-    var profileData = buildProfileArray();
+    var profileData = /*CHASM_ARRAY_UTILS.*/buildProfileArray();
     
-    var xyPoints = generateXYPoints(profileData);
+    var xyPoints = /*TRANSLATE.*/generateXYPoints(profileData);
     if(xyPoints){
-        setGeometry(xyPoints);
+        /*UI_GRAPH.*/setGeometry(xyPoints);
     }
 }
 
 function renderSoil()
 {
-    var strataData = buildSoilStrataArray();
-    setSoilOffsets(strataData);
+    var strataData = /*CHASM_ARRAY_UTILS.*/buildSoilStrataArray();
+    /*UI_GRAPH.*/setSoilOffsets(strataData);
 }
 
 function renderWaterTable()
 {
-    var waterData = buildWaterArray();
-    setWaterTableOffsets(waterData);
+    var waterData = /*CHASM_ARRAY_UTILS.*/buildWaterArray();
+    /*UI_GRAPH.*/setWaterTableOffsets(waterData);
 }
 
 function changeSegmentIds( oldId, newId )
 {
+/*
     if ( oldId < num_profile_segments )
     {
         $("#profile" + oldId).attr("id", "profile" + newId);
@@ -333,27 +342,28 @@ function changeSegmentIds( oldId, newId )
     $("#waterDepth" + oldId + "\\:id").text("x" + newId);
     $("#waterDepth" + oldId + "\\:id").attr("id", "waterDepth" + newId + ":id");
     $("#waterDepth" + oldId + "\\:depth").attr("id", "waterDepth" + newId + ":depth");
+    */
 }
 
 function deleteSegment(id){
 
     $("#profile"+id).remove();
-    $("#soilDepth"+id).remove();
-    $("#waterDepth"+id).remove();
+    $("#soilDepth"+(id+1)).remove();
+    $("#waterDepth"+(id+1)).remove();
     
     // There's one more point than segments (for soil strata/water)
     //for (var idx=id+1; idx <= num_profile_segments; idx++ )
     //{
     //    changeSegmentIds( idx, idx - 1);
     //}
-    num_profile_segments--;
-    updateNumProfileSegmentsDisplay();
+    /*THIS.*/num_profile_segments--;
+    /*THIS.*/updateNumProfileSegmentsDisplay();
     
-    render();
+    /*THIS.*/render();
 }
 
 $(document).ready(function(){
-    updateNumProfileSegmentsDisplay();
+    /*THIS.*/updateNumProfileSegmentsDisplay();
     $("#tabs a").click(function(){
         if(!$(this).hasClass("selected")){
 			$(".selected").removeClass("selected");
@@ -364,17 +374,17 @@ $(document).ready(function(){
 	});
     
 	$(".add-profile-segment").click(function(){
-        addSegmentRow();
+        /*THIS.*/addSegmentRow();
 		return false;
 	});
 	
 	$(".add-rainfall").click(function(){
-		addRainfallRowHtml();
+		/*THIS.*/addRainfallRowHtml();
 		return false;
 	});
 	
 	$(".soil-table select").change(function(){
-		var sg = getSoilGrade($(this).val());
+		var sg = /*THIS.*/getSoilGrade($(this).val());
 		var elem = $(this).attr("id").split(":", 1);
 		$("#" + elem + "\\:c").val(sg.c);
 		$("#" + elem + "\\:c").addClass("computed");
