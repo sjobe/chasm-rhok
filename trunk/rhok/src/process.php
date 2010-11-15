@@ -1,6 +1,8 @@
 <html>
 <body>
 <?php
+include_once "profile.php";
+
 class Chasm_Input_Parser
 {
 
@@ -52,37 +54,134 @@ class Chasm_Input_Parser
 ?>
 <pre>
 <?php
-/*
+//    print_r($_REQUEST);  
+    $profileGeometry = $_REQUEST[Chasm_Input_Parser::PROFILE];
+                    
+    $soil1Depths = $_REQUEST[Chasm_Input_Parser::SOIL][0][Chasm_Input_Parser::SOIL_DEPTH];
+	    									
+    $soil2Depths = $_REQUEST[Chasm_Input_Parser::SOIL][1][Chasm_Input_Parser::SOIL_DEPTH];
+	
+    $soil3Depths = $_REQUEST[Chasm_Input_Parser::SOIL][2][Chasm_Input_Parser::SOIL_DEPTH];
+    
+    $soil4Depths = $_REQUEST[Chasm_Input_Parser::SOIL][3][Chasm_Input_Parser::SOIL_DEPTH];
+    
+
+    
+	$waterDepths = $_REQUEST[Chasm_Input_Parser::WATER_DEPTH];
+	
+    $segment = Chasm_Profile_Parser::generateXYPoints( $profileGeometry );
+
+    $max_height = $segment[0][Chasm_Profile_Parser::Y];
+    $max_width = $segment[ count( $segment ) - 1][Chasm_Profile_Parser::X];
+
+    $soilLayers = array();
+	$idx = 0;	
+	$max_depth = 0;
+	
+	do {
+		$soilDepths = $_REQUEST[Chasm_Input_Parser::SOIL][ $idx ][Chasm_Input_Parser::SOIL_DEPTH];
+		$max_depth += array_sum( $soilDepths );
+		$soilLayers[ $idx ] =  Chasm_Profile_Parser::generateLayerXYPoints( $segment, $soilDepths );
+ 	} while ( $soilLayers[ $idx++ ] != $segment);
+
+ 	for ( $idx = 0; $idx < count( $soilLayers ); $idx++ ) {
+ 		$soilLayers[ $idx ][Chasm_Profile_Parser::SOIL_TYPE] = $idx; 
+ 	}
+ 	 	
+    $soil1 = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $soil1Depths );
+    $soil1[Chasm_Profile_Parser::SOIL_TYPE] = 0;
+    
+    $soil2 = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $soil2Depths );
+    $soil2[Chasm_Profile_Parser::SOIL_TYPE] = 1;
+    
+    $soil3 = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $soil3Depths );
+    $soil3[Chasm_Profile_Parser::SOIL_TYPE] = 2;
+    
+    $soil4 = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $soil4Depths );  
+    $soil4[Chasm_Profile_Parser::SOIL_TYPE] = 3;
+
+    $bottomDepths = array_fill(0, count( $segment ), $max_height + $max_depth);
+    $bottom = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $bottomDepths );
+    $bottom[Chasm_Profile_Parser::SOIL_TYPE] = 2;
+    
+    $water = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $waterDepths );
+    
+    $cells = Chasm_Profile_Parser::generateCells($segment, $soil1, $soil2, $bottom, $bottom );
+
+    $width = $segment[count($segment)-1][Chasm_Profile_Parser::X];
+    
+	$water_columns = Chasm_Profile_Parser::generateWaterColumns( $width, $water );
+	Chasm_Profile_Parser::generateFile( $cells, $water_columns );    
+?>
+</pre>
+
+<!--
+<pre>
 Array
 (
     [info] => Array
         (
-            [name] => MyName
-            [latitude] => 35.54
-            [longitude] => 143.5
+            [name] => 
+            [latitude] => 
+            [longitude] => 
         )
 
     [profile] => Array
         (
             [0] => Array
                 (
-                    [height] => 3
-                    [length] => 5
-                    [angle] => 36.86989764584402
+                    [height] => 0
+                    [length] => 8
+                    [angle] => 0
                 )
 
             [1] => Array
                 (
-                    [height] => 10
-                    [length] => 26.694671625540145
-                    [angle] => 22.61986494804042617294901087668
+                    [height] => 9
+                    [length] => 24.02520446298613
+                    [angle] => 22
                 )
 
             [2] => Array
                 (
-                    [height] => 7
-                    [length] => 25
-                    [angle] => 16.26020470831196
+                    [height] => 17
+                    [length] => 34.00000000000001
+                    [angle] => 30
+                )
+
+            [3] => Array
+                (
+                    [height] => 11
+                    [length] => 21.35764429051392
+                    [angle] => 31
+                )
+
+            [4] => Array
+                (
+                    [height] => 10
+                    [length] => 24.585933355742384
+                    [angle] => 24
+                )
+
+            [5] => Array
+                (
+                    [height] => 1
+                    [length] => 1.5557238268604126
+                    [angle] => 40
+                )
+
+            [6] => Array
+                (
+                    [height] => 0
+                    [length] => 8
+                    [angle] => 0
+                )
+
+            [7] => Array
+                (
+                    [height] => 0
+                    [length] => 16.45
+                    [angle] => 0
                 )
 
         )
@@ -91,21 +190,47 @@ Array
         (
             [0] => Array
                 (
-                    [type] => 1
-                    [c] => 50
-                    [phi] => 60
-                    [ks] => 1e-09
+                    [type] => 6
+                    [c] => 10
+                    [phi] => 23
+                    [ks] => 5e-05
                     [depth] => Array
                         (
-                            [0] => 5
+                            [0] => 3
                             [1] => 5
-                            [2] => 2
-                            [3] => 0
+                            [2] => 6
+                            [3] => 7
+                            [4] => 8
+                            [5] => 10
+                            [6] => 9.5
+                            [7] => 11
+                            [8] => 14
                         )
 
                 )
 
             [1] => Array
+                (
+                    [type] => 4
+                    [c] => 25
+                    [phi] => 33
+                    [ks] => 5e-6
+                    [depth] => Array
+                        (
+                            [0] => 4
+                            [1] => 6
+                            [2] => 8
+                            [3] => 10
+                            [4] => 12
+                            [5] => 14
+                            [6] => 13.5
+                            [7] => 16
+                            [8] => 20
+                        )
+
+                )
+
+            [2] => Array
                 (
                     [type] => 2
                     [c] => 40
@@ -113,26 +238,15 @@ Array
                     [ks] => 1e-08
                     [depth] => Array
                         (
-                            [0] => 10
-                            [1] => 8
-                            [2] => 4
-                            [3] => 0
-                        )
-
-                )
-
-            [2] => Array
-                (
-                    [type] => 
-                    [c] => 
-                    [phi] => 
-                    [ks] => 
-                    [depth] => Array
-                        (
                             [0] => 
                             [1] => 
                             [2] => 
                             [3] => 
+                            [4] => 
+                            [5] => 
+                            [6] => 
+                            [7] => 
+                            [8] => 
                         )
 
                 )
@@ -149,6 +263,11 @@ Array
                             [1] => 
                             [2] => 
                             [3] => 
+                            [4] => 
+                            [5] => 
+                            [6] => 
+                            [7] => 
+                            [8] => 
                         )
 
                 )
@@ -157,33 +276,31 @@ Array
 
     [waterDepth] => Array
         (
-            [0] => 15
-            [1] => 12
-            [2] => 5
-            [3] => 0
+            [0] => 20
+            [1] => 20
+            [2] => 15
+            [3] => 8
+            [4] => 4
+            [5] => 4
+            [6] => 3
+            [7] => 3
+            [8] => 3
         )
 
-    [water_upslope_recharge] => 
+    [water_upslope_recharge] => 0
     [rain] => Array
         (
             [0] => Array
                 (
-                    [frequency] => 5
-                    [duration] => 2
-                    [volume] => 81.28
+                    [frequency] => 50
+                    [duration] => 24
+                    [volume] => 288
                 )
 
-            [1] => Array
-                (
-                    [frequency] => 20
-                    [duration] => 3
-                    [volume] => 132
-                )
         )
+
 )
-*/
-    print_r($_REQUEST);  
-?>
 </pre>
+-->
 </body>
 </html>

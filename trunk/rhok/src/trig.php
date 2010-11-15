@@ -28,7 +28,7 @@ class Chasm_Trig_Functions
       * @param float $theta the angle (in degrees) opposite the height
       * @return float the height of the triangle
       */
-    function getH( $l, $theta ) {
+    public static function getH( $l, $theta ) {
         return $l * sin( degreesToRadians( $theta ) );
     }
 
@@ -39,7 +39,7 @@ class Chasm_Trig_Functions
       * @param float $theta the angle (in degrees) opposite the height
       * @return float the length of the hypotenuse
       */
-    function getL( $h, $theta ) {
+    public static function getL( $h, $theta ) {
         return $h / sin( degreesToRadians( $theta ) );
     }
 
@@ -50,7 +50,7 @@ class Chasm_Trig_Functions
       * @param float $theta the angle (in degrees) opposite the height
       * @return float the height of the triangle
       */
-    function getTheta( $h, $l ) {
+    public static function getTheta( $h, $l ) {
         return radiansToDegrees( asin( $h / $l ) );
     }
 }
