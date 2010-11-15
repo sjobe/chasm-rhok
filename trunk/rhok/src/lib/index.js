@@ -71,6 +71,8 @@ var /*THIS.*/rain_frequency_select_html =
 + "<option value=\"10\">1 in 10</option>"
 + "<option value=\"20\">1 in 20</option>"
 + "<option value=\"50\">1 in 50</option>"
++ "<option value=\"100\">1 in 100</option>"
++ "<option value=\"200\">1 in 200</option>"
 + "<option value=\"500\">1 in 500</option>"
 + "</select>"
 ;
