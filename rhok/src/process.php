@@ -31,6 +31,34 @@ class Chasm_Input_Parser
     const RAIN_DURATION = "duration";
     const RAIN_VOLUME = "volume";
         
+    public static function trimSoil( $soilLayers )
+    {
+    	if ( empty( $soilLayers ) || !is_array( $soilLayers ) )
+    	{
+    		return false;
+    	}
+    	for ($idx = 0; $idx < count( $soilLayers ); $idx++ ) 
+    	{
+    		if ( !is_array( $soilLayers[ $idx ] ) )
+    		{
+    			return false;
+    		}
+    		
+    		if ( 
+    			empty( $soilLayers[ self::SOIL_C ] )
+    				|| empty( $soilLayers[ self::SOIL_PHI ] )
+    				|| empty( $soilLayers[ self::SOIL_KS ] )
+    				|| empty( $soilLayers[ self::SOIL_DEPTH ] )
+    				|| !is_array( $soilLayers[ $idx ] )
+    		 ) {
+    		 	unset( $soilLayers[ $idx ] );
+    		 }
+    		 
+    	}	
+    	
+    	print_r( $soilLayers );
+    }
+    
     public static function validateInfoInput( $info )
     {
     }
@@ -50,11 +78,93 @@ class Chasm_Input_Parser
     public static function validateRainInput( $rain )
     {
     }
+    
+    public static function debugData( $print = FALSE )
+    {
+		$data = array();
+		
+		$data[Chasm_Input_Parser::INFO] = array();
+		$data[Chasm_Input_Parser::INFO][Chasm_Input_Parser::NAME] = "06";
+		$data[Chasm_Input_Parser::INFO][Chasm_Input_Parser::LATITUDE] = "-61.67856";
+		$data[Chasm_Input_Parser::INFO][Chasm_Input_Parser::LONGITUDE] = "13.54678";
+		
+		$data[Chasm_Input_Parser::PROFILE] = array ( array(Chasm_Input_Parser::PROFILE_HEIGHT => 0, 
+	                              Chasm_Input_Parser::PROFILE_LENGTH => 8,
+	                              Chasm_Input_Parser::PROFILE_ANGLE => 0),
+	                        array(Chasm_Input_Parser::PROFILE_HEIGHT => 9, 
+	                              Chasm_Input_Parser::PROFILE_LENGTH => 24.0252044629861,
+	                              Chasm_Input_Parser::PROFILE_ANGLE => 22),
+	                        array(Chasm_Input_Parser::PROFILE_HEIGHT => 17, 
+	                              Chasm_Input_Parser::PROFILE_LENGTH => 34,
+	                              Chasm_Input_Parser::PROFILE_ANGLE => 30),
+	                        array(Chasm_Input_Parser::PROFILE_HEIGHT => 11, 
+	                              Chasm_Input_Parser::PROFILE_LENGTH => 21.3576442905139,
+	                              Chasm_Input_Parser::PROFILE_ANGLE => 31),
+	                        array(Chasm_Input_Parser::PROFILE_HEIGHT => 10, 
+	                              Chasm_Input_Parser::PROFILE_LENGTH => 24.5859333557424,
+	                              Chasm_Input_Parser::PROFILE_ANGLE => 24),
+	                        array(Chasm_Input_Parser::PROFILE_HEIGHT => 1, 
+	                              Chasm_Input_Parser::PROFILE_LENGTH => 1.55572382686041,
+	                              Chasm_Input_Parser::PROFILE_ANGLE => 40),
+	                        array(Chasm_Input_Parser::PROFILE_HEIGHT => 0, 
+	                              Chasm_Input_Parser::PROFILE_LENGTH => 8,
+	                              Chasm_Input_Parser::PROFILE_ANGLE => 0),
+	                       array(Chasm_Input_Parser::PROFILE_HEIGHT => 0, 
+	                              Chasm_Input_Parser::PROFILE_LENGTH => 16.4519761570364,
+	                              Chasm_Input_Parser::PROFILE_ANGLE => 0),
+	                       array(Chasm_Input_Parser::PROFILE_HEIGHT => 12, 
+	                              Chasm_Input_Parser::PROFILE_LENGTH => 0,
+	                              Chasm_Input_Parser::PROFILE_ANGLE => 90),       
+	                    );
+		$data[Chasm_Input_Parser::SOIL] = array(
+							array( 	Chasm_Input_Parser::SOIL_TYPE=>"6",
+									Chasm_Input_Parser::SOIL_C=>"10",
+									Chasm_Input_Parser::SOIL_PHI=>"23",
+									Chasm_Input_Parser::SOIL_KS=>"5e-05",
+									Chasm_Input_Parser::SOIL_DEPTH => array(3, 5, 6, 7, 8, 10, 9.5, 11, 14)),
+							array( 	Chasm_Input_Parser::SOIL_TYPE=>"4",
+									Chasm_Input_Parser::SOIL_C=>"25",
+									Chasm_Input_Parser::SOIL_PHI=>"33",
+									Chasm_Input_Parser::SOIL_KS=>"5e-06",
+									Chasm_Input_Parser::SOIL_DEPTH => array(4, 6, 8, 10, 12, 14, 13.5, 16, 20)),
+							array( 	Chasm_Input_Parser::SOIL_TYPE=>"2",
+									Chasm_Input_Parser::SOIL_C=>"40",
+									Chasm_Input_Parser::SOIL_PHI=>"50",
+									Chasm_Input_Parser::SOIL_KS=>"1e-08",
+									Chasm_Input_Parser::SOIL_DEPTH => array('', '', '', '', '', '', '', '', '')),
+							array( 	Chasm_Input_Parser::SOIL_TYPE=>"",
+									Chasm_Input_Parser::SOIL_C=>"",
+									Chasm_Input_Parser::SOIL_PHI=>"",
+									Chasm_Input_Parser::SOIL_KS=>"",
+									Chasm_Input_Parser::SOIL_DEPTH => array('', '', '', '', '', '', '', '', '')),
+						);
+		$data[Chasm_Input_Parser::WATER_DEPTH] = array(20, 20, 15, 8, 4, 4, 3, 3, 3);
+		$data[Chasm_Input_Parser::WATER_UPSLOPE_RECHARGE] = "0";
+		
+		$data[Chasm_Input_Parser::RAIN] = 	array(
+												array( 	Chasm_Input_Parser::RAIN_FREQUENCY=> "50",
+	                    								Chasm_Input_Parser::RAIN_DURATION => "24",
+														Chasm_Input_Parser::RAIN_VOLUME=>"288"),
+											);
+											
+		if ( $print ) {
+			echo "<pre>";
+			print_r( $data );
+			echo "</pre>";
+		}
+		return $data;
+    }
 }
 ?>
 <pre>
 <?php
-//    print_r($_REQUEST);  
+	if ( empty($_REQUEST) ) {
+		$_REQUEST = Chasm_Input_Parser::debugData();
+		echo "<script>alert(\"No data supplied. Using testcase 06 data\");</script>";
+	}  
+
+	print_r($_REQUEST);
+	echo "<hr/>";
     $profileGeometry = $_REQUEST[Chasm_Input_Parser::PROFILE];
                     
     $soil1Depths = $_REQUEST[Chasm_Input_Parser::SOIL][0][Chasm_Input_Parser::SOIL_DEPTH];
@@ -65,8 +175,6 @@ class Chasm_Input_Parser
     
     $soil4Depths = $_REQUEST[Chasm_Input_Parser::SOIL][3][Chasm_Input_Parser::SOIL_DEPTH];
     
-
-    
 	$waterDepths = $_REQUEST[Chasm_Input_Parser::WATER_DEPTH];
 	
     $segment = Chasm_Profile_Parser::generateXYPoints( $profileGeometry );
@@ -74,19 +182,7 @@ class Chasm_Input_Parser
     $max_height = $segment[0][Chasm_Profile_Parser::Y];
     $max_width = $segment[ count( $segment ) - 1][Chasm_Profile_Parser::X];
 
-    $soilLayers = array();
-	$idx = 0;	
 	$max_depth = 0;
-	
-	do {
-		$soilDepths = $_REQUEST[Chasm_Input_Parser::SOIL][ $idx ][Chasm_Input_Parser::SOIL_DEPTH];
-		$max_depth += array_sum( $soilDepths );
-		$soilLayers[ $idx ] =  Chasm_Profile_Parser::generateLayerXYPoints( $segment, $soilDepths );
- 	} while ( $soilLayers[ $idx++ ] != $segment);
-
- 	for ( $idx = 0; $idx < count( $soilLayers ); $idx++ ) {
- 		$soilLayers[ $idx ][Chasm_Profile_Parser::SOIL_TYPE] = $idx; 
- 	}
  	 	
     $soil1 = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $soil1Depths );
     $soil1[Chasm_Profile_Parser::SOIL_TYPE] = 0;
@@ -111,7 +207,8 @@ class Chasm_Input_Parser
     $width = $segment[count($segment)-1][Chasm_Profile_Parser::X];
     
 	$water_columns = Chasm_Profile_Parser::generateWaterColumns( $width, $water );
-	Chasm_Profile_Parser::generateFile( $cells, $water_columns );    
+	Chasm_Profile_Parser::generateFile( $cells, $water_columns );
+
 ?>
 </pre>
 
