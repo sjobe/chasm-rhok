@@ -215,7 +215,7 @@ th {
 }
 
 .soil-table {
-  width:400px;
+  /*width:400px*/
   margin-top:10px;
 }
 
@@ -228,11 +228,11 @@ th {
   margin-right:50px;
 }
 
-.add-profile-segment {
+.add-profile-segment, .add-soil-layer {
   padding:5px 10px;
 }
 
-.delete-segment a, .reset-segment a {
+.delete-segment, .reset-segment, .delete-strata, .reset-strata, .delete-rainfall-row {
   text-decoration:none;
   font-weight:bold;
   color:#fff;
@@ -244,6 +244,10 @@ th {
   text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
   -webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+#soilStrata\.header th {
+	text-align: center;	
 }
 
 .soil-table select {

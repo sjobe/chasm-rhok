@@ -3,8 +3,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" media="screen" href="css/index.css" />
+ 
 <link rel="stylesheet" type="text/css" href="css/jsxgraph.css" />
 <script type="text/javascript" src="lib/jsxgraphcore.js"></script>
+<!-- 
+<link rel="stylesheet" type="text/css" href="http://jsxgraph.uni-bayreuth.de/distrib/jsxgraph.css" />
+<script type="text/javascript" src="http://jsxgraph.uni-bayreuth.de/distrib/jsxgraphcore.js"></script>
+-->
 <script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="lib/index.js"></script>
 <script type="text/javascript" src="lib/translate.js"></script>
@@ -77,15 +82,21 @@
             </table>
           </div>
           <div class="tab-page soil">
-            <p>Enter the solid strata:</p>
+       	    <p class="table-title">Enter the solid strata</p>
+            <div class="table-title">
+              <a href="#" class="button add-soil-layer">Add New Layer</a>
+              <span># layers: <span id="num-soil-layer"></span></span>
+            </div>
             <table class="soil-table">
             <thead>
-              <tr>
+              <tr id="soilStrata.header">
                 <th scope="col"></th>
+                <!-- 
                 <th scope="col">Strata 1</th>
                 <th scope="col">Strata 2</th>
                 <th scope="col">Strata 3</th>
                 <th scope="col">Strata 4</th>
+                 -->
               </tr>
             </thead>
             <tbody id="soilStrata.type">
@@ -94,6 +105,7 @@
               </tr>
               <tr id="soilStrata.type:id">
                 <td></td>
+                <!-- 
                 <td>
                 <select id="soilStrata0:type" name="soilStrata[0][type]">
                     <option value="" selected="selected"></option>
@@ -138,27 +150,34 @@
                     <option value="6" >VI</option>
                   </select>
                 </td>
+                -->
               </tr>
               <tr id="soilStrata.type:c">
                 <th scope="row">C</th>
+                <!-- 
                 <td><input name="soilStrata[0][c]" id="soilStrata0:c"/></td>
                 <td><input name="soilStrata[1][c]" id="soilStrata1:c"/></td>
                 <td><input name="soilStrata[2][c]" id="soilStrata2:c"/></td>
                 <td><input name="soilStrata[3][c]" id="soilStrata3:c"/></td>
+                 -->
               </tr>
               <tr id="soilStrata.type:phi">
                 <th scope="row">phi</th>
+                <!-- 
                 <td><input name="soilStrata[0][phi]" id="soilStrata0:phi"/></td>
                 <td><input name="soilStrata[1][phi]" id="soilStrata1:phi"/></td>
                 <td><input name="soilStrata[2][phi]" id="soilStrata2:phi"/></td>
                 <td><input name="soilStrata[3][phi]" id="soilStrata3:phi"/></td>
+                 -->
               </tr>
               <tr id="soilStrata.type:ks">
                 <th scope="row">Ks</th>
+                <!-- 
                 <td><input name="soilStrata[0][ks]" id="soilStrata0:ks"/></td>
                 <td><input name="soilStrata[1][ks]" id="soilStrata1:ks"/></td>
                 <td><input name="soilStrata[2][ks]" id="soilStrata2:ks"/></td>
                 <td><input name="soilStrata[3][ks]" id="soilStrata3:ks"/></td>
+                 -->
               </tr>
             </tbody>
             <tbody id="soil-tbody">
