@@ -1,5 +1,20 @@
 <html>
-<body>
+<head>
+	<title>Generated Geometry File</title>
+	<script>
+		var visible = false;
+		function toggleDebug() {
+			alert('Toggling debugging data');
+			if (visible) {
+				document.getElementById('data').style.display = "none";
+			} else {
+				document.getElementById('data').style.display = "block";
+			}
+			visible = !visible;
+		}
+	</script>
+</head>
+<body ondblclick="toggleDebug()">
 <?php
 include_once "profile.php";
 
@@ -132,11 +147,6 @@ class Chasm_Input_Parser
 									Chasm_Input_Parser::SOIL_PHI=>"50",
 									Chasm_Input_Parser::SOIL_KS=>"1e-08",
 									Chasm_Input_Parser::SOIL_DEPTH => array('', '', '', '', '', '', '', '', '')),
-							array( 	Chasm_Input_Parser::SOIL_TYPE=>"",
-									Chasm_Input_Parser::SOIL_C=>"",
-									Chasm_Input_Parser::SOIL_PHI=>"",
-									Chasm_Input_Parser::SOIL_KS=>"",
-									Chasm_Input_Parser::SOIL_DEPTH => array('', '', '', '', '', '', '', '', '')),
 						);
 		$data[Chasm_Input_Parser::WATER_DEPTH] = array(20, 20, 15, 8, 4, 4, 3, 3, 3);
 		$data[Chasm_Input_Parser::WATER_UPSLOPE_RECHARGE] = "0";
@@ -163,18 +173,13 @@ class Chasm_Input_Parser
 		echo "<script>alert(\"No data supplied. Using testcase 06 data\");</script>";
 	}  
 
+	echo "<div id=\"data\" style=\"display:none\">";
 	print_r($_REQUEST);
 	echo "<hr/>";
-    $profileGeometry = $_REQUEST[Chasm_Input_Parser::PROFILE];
-                    
-    $soil1Depths = $_REQUEST[Chasm_Input_Parser::SOIL][0][Chasm_Input_Parser::SOIL_DEPTH];
-	    									
-    $soil2Depths = $_REQUEST[Chasm_Input_Parser::SOIL][1][Chasm_Input_Parser::SOIL_DEPTH];
+	echo "</div>";	
 	
-    $soil3Depths = $_REQUEST[Chasm_Input_Parser::SOIL][2][Chasm_Input_Parser::SOIL_DEPTH];
-    
-    $soil4Depths = $_REQUEST[Chasm_Input_Parser::SOIL][3][Chasm_Input_Parser::SOIL_DEPTH];
-    
+    $profileGeometry = $_REQUEST[Chasm_Input_Parser::PROFILE];
+                       
 	$waterDepths = $_REQUEST[Chasm_Input_Parser::WATER_DEPTH];
 	
     $segment = Chasm_Profile_Parser::generateXYPoints( $profileGeometry );
@@ -182,31 +187,29 @@ class Chasm_Input_Parser
     $max_height = $segment[0][Chasm_Profile_Parser::Y];
     $max_width = $segment[ count( $segment ) - 1][Chasm_Profile_Parser::X];
 
-	$max_depth = 0;
- 	 	
-    $soil1 = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $soil1Depths );
-    $soil1[Chasm_Profile_Parser::SOIL_TYPE] = 0;
+    $max_depth = 0;
+    $soilLayers = array();
+    for ( $depthIdx = 0; $depthIdx < count( $_REQUEST[Chasm_Input_Parser::SOIL] ) - 1; $depthIdx++ )
+    {
+    	$soilLayer = Chasm_Profile_Parser::generateLayerXYPoints( $segment, 
+    		$_REQUEST[Chasm_Input_Parser::SOIL][ $depthIdx ][Chasm_Input_Parser::SOIL_DEPTH] );    	
+    	$soilLayer[Chasm_Profile_Parser::SOIL_TYPE] =  $depthIdx;
+    	array_push( $soilLayers,  $soilLayer);
+    	
+    	$max_depth += array_sum($_REQUEST[Chasm_Input_Parser::SOIL][ $depthIdx ][Chasm_Input_Parser::SOIL_DEPTH]);
+    }
     
-    $soil2 = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $soil2Depths );
-    $soil2[Chasm_Profile_Parser::SOIL_TYPE] = 1;
-    
-    $soil3 = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $soil3Depths );
-    $soil3[Chasm_Profile_Parser::SOIL_TYPE] = 2;
-    
-    $soil4 = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $soil4Depths );  
-    $soil4[Chasm_Profile_Parser::SOIL_TYPE] = 3;
-
     $bottomDepths = array_fill(0, count( $segment ), $max_height + $max_depth);
     $bottom = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $bottomDepths );
-    $bottom[Chasm_Profile_Parser::SOIL_TYPE] = 2;
+    $bottom[Chasm_Profile_Parser::SOIL_TYPE] = count( $soilLayers );
+    
+    array_push( $soilLayers, $bottom );
     
     $water = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $waterDepths );
     
-    $cells = Chasm_Profile_Parser::generateCells($segment, $soil1, $soil2, $bottom, $bottom );
-
-    $width = $segment[count($segment)-1][Chasm_Profile_Parser::X];
+    $cells = Chasm_Profile_Parser::generateCellsArr($segment, $soilLayers);
     
-	$water_columns = Chasm_Profile_Parser::generateWaterColumns( $width, $water );
+	$water_columns = Chasm_Profile_Parser::generateWaterColumns( $max_width, $water );
 	Chasm_Profile_Parser::generateFile( $cells, $water_columns );
 
 ?>

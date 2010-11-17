@@ -1,4 +1,4 @@
-var graph = JXG.JSXGraph.initBoard('box', {boundingbox: [-5,100,150,-5], showNavigation: 0, snapToGrid: true, snapSizeX: 2, snapSizeY: 2, originX: 0, originY: 500, unitX: 150, unitY: 100, axis:true});
+var graph = JXG.JSXGraph.initBoard('box', {boundingbox: [-5,100,150,-5], showNavigation: 1, snapToGrid: true, snapSizeX: 2, snapSizeY: 2, originX: 0, originY: 500, unitX: 150, unitY: 100, axis:true});
 
 // profile
 var geometryLines = new Array();
