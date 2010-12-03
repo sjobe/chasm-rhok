@@ -66,7 +66,7 @@
 			}
 			
 			// loop through hours
-			$rain = $req[ Chasm_Input_Parser::RAIN ][0];
+			$rain = $req[ Chasm_Input_Parser::RAIN ][ $rainIdx ];
 			$hours = $rain[ Chasm_Input_Parser::RAIN_DURATION ];
 			$volume = $rain[ Chasm_Input_Parser::RAIN_VOLUME ];
 			
