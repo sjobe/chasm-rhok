@@ -84,6 +84,10 @@ body {
   background-image: url(../img/gradient_d.png);
 }
 
+#compute-button-holder {
+  padding-left: 10px;
+}
+
 #compute-button:hover {
   background-image: url(../img/gradient_l.png);
   color: #000;
@@ -106,7 +110,6 @@ body {
   -webkit-border-radius: 5px 5px 0px 0px;
   border-bottom:1px solid #6D6E71;
   border: 1px solid #777;
-
 }
 
 #tabs a {
@@ -159,7 +162,7 @@ body {
 
 .tab-page {
   padding:5px;
-  height:325px;/*originally 514*/
+  height:482px;
   overflow-y:auto;
   border-right: 1px solid #777;
   border-left: 1px solid #777;

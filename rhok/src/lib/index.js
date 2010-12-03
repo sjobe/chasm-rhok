@@ -44,6 +44,9 @@ var /*THIS.*/soil_layer_type_html =
 + "</td>"
 ;
 
+var /*THIS.*/soil_layer_color_html =
+	"<td><input name=\"soilStrata[#STRATA#][color]\" id=\"soilStrata#STRATA#:color\"/></td>";
+
 var /*THIS.*/soil_layer_c_html =
 "<td><input name=\"soilStrata[#STRATA#][c]\" id=\"soilStrata#STRATA#:c\"/></td>";
 
@@ -111,7 +114,7 @@ var /*THIS.*/rainfall_row_html =
 + "<input id=\"rain#ID#:volume\" name=\"rain[#ID#][volume]\"/>"
 + "</td>"
 + "<td id=\"rain#ID#:delete\">"
-+ "<a class=\"delete-rainfall-row\" href=\"#\" onclick=\"deleteRainfall(\\\"rain#ID#\\\")\">x</a>"
++ "<a class=\"delete-rainfall-row\" href=\"#\">x</a>"
 + "</td>"
 + "</tr>"
 ;
@@ -141,7 +144,8 @@ function addSegmentRow()
     $("#profile"+(/*THIS.*/num_profile_segments -1)+"\\:delete").remove();
     
     var elem = /*THIS.*/getNextElemId();
-    $("#profile-data").append(/*THIS.*/profile_segment_html.replace(/#ID#/g, /*THIS.*/num_profile_segments));
+    $("#profile-data").append(/*THIS.*/profile_segment_html.replace(/#ID#/g, 
+    	/*THIS.*/num_profile_segments));
     /*THIS.*/addSoilDepthRow();
     /*THIS.*/addWaterRowHtml();    
     
@@ -152,7 +156,7 @@ function addSegmentRow()
             && $("#" + elem + "\\:length").val() 
             && $("#" + elem + "\\:angle").val())
         {
-            /*THIS.*/render();
+            /*THIS.*/renderProfile();
         }
     });
     
@@ -175,10 +179,11 @@ function addSoilLayer()
     	// add header
 		$("#soilStrata\\.header").append(
 				/*THIS.*/soil_layer_header_html.replace(/#NUM#/g,
-						(/*THIS.*/num_strata + 1)).replace(/#STRATA#/g, /*THIS.*/num_strata) );
+						(/*THIS.*/num_strata + 2)).replace(/#STRATA#/g, /*THIS.*/num_strata) );
     	// add type
 		$("#soilStrata\\.type\\:id").append(
-				/*THIS.*/soil_layer_type_html.replace(/#STRATA#/g, /*THIS.*/num_strata) );
+				/*THIS.*/soil_layer_type_html.replace(/#STRATA#/g, /*THIS.*/num_strata + 1 ) );
+		
 		// add change event handler to auto populate
 		$(".soil-table select:last").change(function(){
 			var sg = /*THIS.*/getSoilGrade($(this).val());
@@ -193,7 +198,8 @@ function addSoilLayer()
 		
     	// add c
 		$("#soilStrata\\.type\\:c").append(
-				/*THIS.*/soil_layer_c_html.replace(/#STRATA#/g, /*THIS.*/num_strata) );
+				/*THIS.*/soil_layer_c_html.replace(/#STRATA#/g, /*THIS.*/num_strata + 1) );
+		
 		// add event handler to remove computed marker on manual change
 		$("#soilStrata\\.type\\:c input:last").change(function() {
 			$(this).removeClass("computed");
@@ -201,7 +207,8 @@ function addSoilLayer()
 		
     	// add phi
 		$("#soilStrata\\.type\\:phi").append(
-				/*THIS.*/soil_layer_phi_html.replace(/#STRATA#/g, /*THIS.*/num_strata) );
+				/*THIS.*/soil_layer_phi_html.replace(/#STRATA#/g, /*THIS.*/num_strata + 1) );
+		
 		// add event handler to remove computed marker on manual change
 		$("#soilStrata\\.type\\:phi input:last").change(function() {
 			$(this).removeClass("computed");
@@ -209,7 +216,8 @@ function addSoilLayer()
 		
     	// add ks
 		$("#soilStrata\\.type\\:ks").append(
-				/*THIS.*/soil_layer_ks_html.replace(/#STRATA#/g, /*THIS.*/num_strata) );
+				/*THIS.*/soil_layer_ks_html.replace(/#STRATA#/g, /*THIS.*/num_strata + 1) );
+		
 		// add event handler to remove computed marker on manual change
 		$("#soilStrata\\.type\\:ks input:last").change(function() {
 			$(this).removeClass("computed");
@@ -222,7 +230,7 @@ function addSoilLayer()
 	    	{
 	    		$("#soilDepth" + depthIdx).append(
 	    				/*THIS.*/soil_layer_depth_html.replace(/#STRATA#/g, 
-	    						num_strata).replace(/#DEPTH#/g, depthIdx ) );
+	    						num_strata ).replace(/#DEPTH#/g, depthIdx ) );
 	    	}
 		}
 		
@@ -252,7 +260,8 @@ function addSoilDepthRow()
 	}
     else
     {
-		$("#soil-tbody").append(/*THIS.*/soil_depth_html.replace(/#DEPTH#/g, /*THIS.*/num_profile_segments + 1));
+		$("#soil-tbody").append(/*THIS.*/soil_depth_html.replace(/#DEPTH#/g, 
+			/*THIS.*/num_profile_segments + 1));
 		if ( num_strata > 0 )
 		{
 			for ( var strataIdx = 0; strataIdx < num_strata; strataIdx++ )
@@ -332,29 +341,29 @@ function render()
     
     /*THIS.*/renderWaterTable();
     
-    /*UI_GRAPH.*/updateGraph();
+//    CHASM.fireUpdate( );
+    ///*UI_GRAPH.*/updateGraph();
 }
 
 function renderProfile()
 {
     var profileData = /*CHASM_ARRAY_UTILS.*/buildProfileArray();
     
-    var xyPoints = /*TRANSLATE.*/generateXYPoints(profileData);
-    if(xyPoints){
-        /*UI_GRAPH.*/setGeometry(xyPoints);
-    }
+//    var xyPoints = /*TRANSLATE.*/generateXYPoints(profileData);
+   	CHASM.setProfileData( profileData );
 }
 
 function renderSoil()
 {
     var strataData = /*CHASM_ARRAY_UTILS.*/buildSoilStrataArray();
-    /*UI_GRAPH.*/setSoilOffsets(strataData);
+    CHASM.setSoilDepths( strataData );
 }
 
 function renderWaterTable()
 {
     var waterData = /*CHASM_ARRAY_UTILS.*/buildWaterArray();
-    /*UI_GRAPH.*/setWaterTableOffsets(waterData);
+//    /*UI_GRAPH.*/setWaterTableOffsets(waterData);
+    CHASM.setWaterDepths( waterData );
 }
 
 function deleteSegment(id){
@@ -380,7 +389,7 @@ function resetSegment(id) {
     $("#profile"+id+ "\\:length").removeClass("error");
     $("#profile"+id+ "\\:angle").removeClass("computed");
     $("#profile"+id+ "\\:angle").removeClass("error");
-	/*THIS.*/render();
+	/*THIS.*/renderProfile();
 }
 
 function autoCompleteProfileRow( elemTag )
@@ -408,7 +417,7 @@ function autoCompleteProfileRow( elemTag )
     }
     else if ( l && theta && !h )
     {
-        var calcH = getH( l, theta );
+        var calcH = /*translate.*/getH( l, theta );
  		$("#" + elem + "\\:height").val( calcH );
         if ( isNaN( calcH ) )
         {
@@ -421,7 +430,7 @@ function autoCompleteProfileRow( elemTag )
 	}
     else if ( h && theta && !l )
     {
-        var calcL = getL( h, theta );
+        var calcL = /*translate.*/getL( h, theta );
  		$("#" + elem + "\\:length").val( calcL );
         if ( isNaN( calcL ) )
         {
@@ -434,7 +443,7 @@ function autoCompleteProfileRow( elemTag )
 	}
     else if( h && l && !theta )
     {
-        var calcTheta = getTheta( h, l );
+        var calcTheta = /*translate.*/getTheta( h, l );
  		$("#" + elem + "\\:angle").val( calcTheta );
         if (isNaN( calcTheta ) )
         {
@@ -454,8 +463,23 @@ function autoCompleteProfileRow( elemTag )
 	}
 }
 
+function populateColorChoosers()
+{
+	$(".color-chooser").empty();
+	
+	var colors = CHASM.getSoilColors();
+	for ( var idx=0; idx < colors.length; idx++ )
+	{
+		$(".color-chooser").append("<option value=\"" + colors[idx] + "\" style=\"background-color: " + colors[idx] + ";\"></option>");
+	}
+}
+
 $(document).ready(function(){
     /*THIS.*/updateNumProfileSegmentsDisplay();
+    GRAPH.ui = JXG.JSXGraph.initBoard('box', {boundingbox: [-5,100,150,-5], showNavigation: 1, snapToGrid: true, snapSizeX: 2, snapSizeY: 2, originX: 0, originY: 500, unitX: 150, unitY: 100, axis:true});
+    CHASM.addListener( GRAPH.handleUpdate );
+    
+	// add tab event handler to select tab
     $("#tabs a").click(function(){
         if(!$(this).hasClass("selected")){
 			$(".selected").removeClass("selected");
@@ -465,18 +489,50 @@ $(document).ready(function(){
 		return false;
 	});
     
+	// add segment row event handler to add additional profile segment
 	$(".add-profile-segment").click(function(){
         /*THIS.*/addSegmentRow();
 		return false;
 	});
 
+	// add soil layer event handler to add additional soil layer
 	$(".add-soil-layer").click(function(){
         /*THIS.*/addSoilLayer();
 		return false;
 	});
 	
+	// add change event handler to auto populate
+	$(".soil-table select:first").change(function(){
+		var sg = /*THIS.*/getSoilGrade($(this).val());
+		var elem = $(this).attr("id").split(":", 1);
+		$("#" + elem + "\\:c").val(sg.c);
+		$("#" + elem + "\\:c").addClass("computed");
+        $("#" + elem + "\\:phi").val(sg.phi);
+        $("#" + elem + "\\:phi").addClass("computed");
+        $("#" + elem + "\\:ks").val(sg.ksat);
+        $("#" + elem + "\\:ks").addClass("computed");
+	});
+	
+	// add c event handler to remove computed marker on manual change
+	$("#soilStrata\\.type\\:c input:last").change(function() {
+		$(this).removeClass("computed");
+	});
+	
+	// add phi event handler to remove computed marker on manual change
+	$("#soilStrata\\.type\\:phi input:last").change(function() {
+		$(this).removeClass("computed");
+	});
+	
+	// add ks event handler to remove computed marker on manual change
+	$("#soilStrata\\.type\\:ks input:last").change(function() {
+		$(this).removeClass("computed");
+	});
+	
+	// add rainfall event handler to add new rainfall row
 	$(".add-rainfall").click(function(){
 		/*THIS.*/addRainfallRowHtml();
 		return false;
 	});
+	
+	//populateColorChoosers()
 });
