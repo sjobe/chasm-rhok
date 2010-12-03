@@ -1,6 +1,4 @@
 <?php
-include_once "profile.php";
-
 class Chasm_Input_Parser
 {
 
@@ -44,10 +42,10 @@ class Chasm_Input_Parser
     		}
     		
     		if ( 
-    			empty( $soilLayers[ self::SOIL_C ] )
-    				|| empty( $soilLayers[ self::SOIL_PHI ] )
-    				|| empty( $soilLayers[ self::SOIL_KS ] )
-    				|| empty( $soilLayers[ self::SOIL_DEPTH ] )
+    			empty( $soilLayers[ Chasm_Input_Parser::SOIL_C ] )
+    				|| empty( $soilLayers[ Chasm_Input_Parser::SOIL_PHI ] )
+    				|| empty( $soilLayers[ Chasm_Input_Parser::SOIL_KS ] )
+    				|| empty( $soilLayers[ Chasm_Input_Parser::SOIL_DEPTH ] )
     				|| !is_array( $soilLayers[ $idx ] )
     		 ) {
     		 	unset( $soilLayers[ $idx ] );
@@ -139,6 +137,9 @@ class Chasm_Input_Parser
 												array( 	Chasm_Input_Parser::RAIN_FREQUENCY=> "50",
 	                    								Chasm_Input_Parser::RAIN_DURATION => "24",
 														Chasm_Input_Parser::RAIN_VOLUME=>"288"),
+												array( 	Chasm_Input_Parser::RAIN_FREQUENCY=> "5",
+	                    								Chasm_Input_Parser::RAIN_DURATION => "10",
+														Chasm_Input_Parser::RAIN_VOLUME=>"152.4"),
 											);
 											
 		if ( $print ) {
