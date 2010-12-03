@@ -1,4 +1,4 @@
-var graph = JXG.JSXGraph.initBoard('box', {boundingbox: [-5,100,150,-5], showNavigation: 1, snapToGrid: true, snapSizeX: 2, snapSizeY: 2, originX: 0, originY: 500, unitX: 150, unitY: 100, axis:true});
+var graph = null;
 
 // profile
 var geometryLines = new Array();
@@ -22,7 +22,6 @@ var waterTablePoints = new Array();
 var geometryColor = '#000000';
 var soilColor = new Array('#DCBE84',  '#C7A675',  '#AA3961',  '#997B62');
 var waterColor = '#B9E2FA';
-
 
 function plotArrayOfPoints(pointsArray, dashed, lineColor) {
 	// clear elements from array
@@ -245,7 +244,6 @@ function createPoint( xCoord, yCoord){
 }
 
 function createLine( xCoord1, yCoord1, xCoord2, yCoord2, dashed, lineColor){
-//	createPoint( xCoord1, yCoord1);
 //	createPoint( xCoord2, yCoord2);
 	if(dashed == true){
 		return /*THIS.*/graph.createElement(

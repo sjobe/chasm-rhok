@@ -40,6 +40,7 @@ class Chasm_Input_Parser
     
     const WATER_DEPTH = "waterDepth";
     const WATER_UPSLOPE_RECHARGE = "waterUpslopeRecharge";
+    const WATER_INITIAL_SLOPE_SUCTION = "waterInitialSlopeSuction";
     
     const RAIN = "rain";
     const RAIN_FREQUENCY = "frequency";
@@ -168,7 +169,7 @@ class Chasm_Input_Parser
 ?>
 <pre>
 <?php
-	if ( empty($_REQUEST) ) {
+	if ( empty($_REQUEST) ) {		
 		$_REQUEST = Chasm_Input_Parser::debugData();
 		echo "<script>alert(\"No data supplied. Using testcase 06 data\");</script>";
 	}  
@@ -194,6 +195,7 @@ class Chasm_Input_Parser
     	$soilLayer = Chasm_Profile_Parser::generateLayerXYPoints( $segment, 
     		$_REQUEST[Chasm_Input_Parser::SOIL][ $depthIdx ][Chasm_Input_Parser::SOIL_DEPTH] );    	
     	$soilLayer[Chasm_Profile_Parser::SOIL_TYPE] =  $depthIdx;
+    	    	
     	array_push( $soilLayers,  $soilLayer);
     	
     	$max_depth += array_sum($_REQUEST[Chasm_Input_Parser::SOIL][ $depthIdx ][Chasm_Input_Parser::SOIL_DEPTH]);
@@ -203,14 +205,60 @@ class Chasm_Input_Parser
     $bottom = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $bottomDepths );
     $bottom[Chasm_Profile_Parser::SOIL_TYPE] = count( $soilLayers );
     
+    
     array_push( $soilLayers, $bottom );
     
     $water = Chasm_Profile_Parser::generateLayerXYPoints( $segment, $waterDepths );
     
+    
+//	echo "<table border=\"1\">";
+//	echo "<tr><th>col</th><th>x_coord</th><th>y_coord</th><th>water y</th><th>soil 1 y</th><th>soil 2 y</th></tr>";   
+//    for ( $i = 0; $i < count( $segment ); $i++ )
+//    {
+//    	echo "<tr>";
+//		echo "<td>" . $i . "</td>";
+//		echo "<td>" . ($segment[$i][Chasm_Profile_Parser::X]) . "</td>";
+//		echo "<td>" . $segment[$i][Chasm_Profile_Parser::Y] . "</td>";
+//		echo "<td>" . $water[$i][Chasm_Profile_Parser::Y] . "</td>";
+//		echo "<td>" . $soilLayers[0][$i][Chasm_Profile_Parser::Y] . "</td>";
+//		echo "<td>" . $soilLayers[1][$i][Chasm_Profile_Parser::Y] . "</td>";
+//    	echo "</tr>";
+//    }
+//    echo "</table>";
+    
     $cells = Chasm_Profile_Parser::generateCellsArr($segment, $soilLayers);
     
+//    $profile = Chasm_Profile_Parser::generateWaterColumns( $max_width, $segment );
+//    $soil1 = Chasm_Profile_Parser::generateWaterColumns( $max_width, $soilLayers[0] );
+//    $soil2 = Chasm_Profile_Parser::generateWaterColumns( $max_width, $soilLayers[1] );
 	$water_columns = Chasm_Profile_Parser::generateWaterColumns( $max_width, $water );
-	Chasm_Profile_Parser::generateFile( $cells, $water_columns );
+//	
+//	echo "<table border=\"1\">";
+//	echo "<tr><th>col</th><th>x_coord</th><th>y_coord</th><th>water y</th><th>soil 1 y</th><th>soil 2 y</th></tr>";   
+//    for ( $i = 0; $i < count( $water_columns ); $i++ )
+//    {
+//    	echo "<tr>";
+//		echo "<td>" . ($i + 1) . "</td>";
+//		echo "<td>" . ($i + 0.5) . "</td>";
+//		echo "<td>" . $profile[$i] . "</td>";
+//		echo "<td>" . $water_columns[$i] . "</td>";
+//		echo "<td>" . $soil1[$i] . "</td>";
+//		echo "<td>" . $soil2[$i] . "</td>";
+//    	echo "</tr>";
+//    }
+//    echo "</table>";
+    
+	if ( !empty( $_REQUEST[ Chasm_Input_Parser::WATER_INITIAL_SLOPE_SUCTION ] ) )
+	{
+//		echo 'using default slope suction: ' . $_REQUEST[ Chasm_Input_Parser::WATER_INITIAL_SLOPE_SUCTION ];
+		Chasm_Profile_Parser::generateFile( $cells, $water_columns, 
+			$_REQUEST[ Chasm_Input_Parser::WATER_INITIAL_SLOPE_SUCTION ] );	
+	}
+	else
+	{
+//		echo 'using default slope suction: -0.5';
+		Chasm_Profile_Parser::generateFile( $cells, $water_columns );
+	}
 
 ?>
 </pre>
