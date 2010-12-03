@@ -104,7 +104,6 @@ var /*THIS.*/rain_frequency_select_html =
 
 var /*THIS.*/rainfall_row_html =
 "<tr id=\"rain#ID#\">"
-+ "<td>"
 + /*THIS.*/rain_frequency_select_html
 + "</td>"
 + " <td>"
