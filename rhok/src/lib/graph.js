@@ -86,30 +86,62 @@ GRAPH.updateGraph = function( model )
 	} catch (error) {
 	}
 	
-	var leftGraphBuffer = profilePoints[ profilePoints.length - 1 ][ model.X ] / 20 * -1;
+	// calculate left hand x coordinate for bounding box
+	var x1 = profilePoints[ profilePoints.length - 1 ][ model.X ] / 20 * -1;
 	
-	var minY = profilePoints[ profilePoints.length - 1 ][ model.Y ];
+	var x2 = profilePoints[ profilePoints.length - 1 ][ model.X ] * 21 / 20; 
+	
+	var y1 = profilePoints[ 0 ][ model.Y ];
+	
+	// calculate bottom right y coordinate for bounding box
+	var y2 = profilePoints[ profilePoints.length - 1 ][ model.Y ];
 	try {
-		if ( waterPoints[ waterPoints.length - 1 ][ model.Y ] < minY ) {
-			minY = waterPoints[ waterPoints.length - 1 ][ model.Y ];
-		}
-		for ( var layerIdx = 0; layerIdx < soilPoints.length; layerIdx++ )
-		{
-			for (var idx = 0; idx < soilPoints[ layerIdx ].length; idx++ )
-			{
-				if ( soilPoints[ layerIdx ][ idx ] < minY )
-				{
-					minY = soilPoints[ layerIdx ][ idx ];
-				}
-			}
+		if ( waterPoints[ waterPoints.length - 1 ][ model.Y ] < y2 ) {
+			y2 = waterPoints[ waterPoints.length - 1 ][ model.Y ];
 		}
 	} catch (error) {}
-	minY = minY - (profilePoints[ 0 ][ model.Y ] - minY) / 10 ;
-	this.ui.setBoundingBox( new Array( leftGraphBuffer,
-		profilePoints[ 0 ][ model.Y ], profilePoints[ profilePoints.length - 1 ][ model.X ],
-		minY ), false );
+	try {
+		for ( var layerIdx = 0; layerIdx < soilPoints.length; layerIdx++ )
+		{
+			try {
+				for (var idx = 0; idx < soilPoints[ layerIdx ].length; idx++ )
+				{
+					if ( soilPoints[ layerIdx ][ idx ] < y2 )
+					{
+						y2 = soilPoints[ layerIdx ][ idx ];
+					}
+				}
+			} catch (error) { continue; }	
+		}
+	} catch (error) {}
+	y2 = y2 - (y1 - y2) / 20 ;
 	
+	// calculate size of bounding box 
+	var xWidth = x2 - x1;
+	var yHeight = y1 - y2;
+	
+	// determine which size to use to keep aspect ratio 1:1
+	var bounds = Math.max( xWidth, yHeight ) / 2.0;
+	
+	var xCenter = x1 + xWidth / 2;
+	var yCenter = y2 + yHeight / 2;
+	
+	var upperLeftX = xCenter - bounds;
+	var upperLeftY = yCenter + bounds;
+	
+	var lowerRightX = xCenter + bounds;
+	var lowerRightY = yCenter - bounds;
+	
+	// ( x1, profilePoints[ 0 ][ model.Y ] )
+	// ( profilePoints[ profilePoints.length - 1 ][ model.X ], y2 ) 
 
+//	this.ui.setBoundingBox( new Array( x1, profilePoints[ 0 ][ model.Y ],
+//		profilePoints[ profilePoints.length - 1 ][ model.X ], y2 ), false );
+//	
+//	alert( "Calculated: " + upperLeftX + ", " + upperLeftY + " | " + lowerRightX + ", " + lowerRightY );
+//	
+	this.ui.setBoundingBox( new Array( upperLeftX, upperLeftY, 
+		lowerRightX, lowerRightY ), false );
 };
 
 GRAPH.createPoint = function( xCoord, yCoord )
