@@ -173,12 +173,13 @@ function addSegmentRow()
     /*THIS.*/updateNumProfileSegmentsDisplay();
 }
 function reOrderSoilTabIndexes(){
-	var totalInputs=$('input','#soil-tbody');
-	var totalRows=$('.soil-depth','#soil-tbody').length;
-	var length =totalInputs.length;
-	var rowLength = length / totalRows;
+	var totalNumInputs =$('input','#soil-tbody').length;
+	
+	var numRows = $('.soil-depth','#soil-tbody').length;
+	var numColumns = totalNumInputs / numRows;
+	
 	$('input','#soil-tbody').each(function(index,element){
-		$(this).attr('tabindex',1 + (index - index%rowLength)/rowLength) + totalRows*(index%rowLength);
+		$(this).attr('tabindex',1 + (index % numColumns) + numRows * ( index % numColumns ));
 	});
 }
 function addSoilLayer()
