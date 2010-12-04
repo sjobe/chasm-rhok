@@ -131,15 +131,7 @@ GRAPH.updateGraph = function( model )
 	
 	var lowerRightX = xCenter + bounds;
 	var lowerRightY = yCenter - bounds;
-	
-	// ( x1, profilePoints[ 0 ][ model.Y ] )
-	// ( profilePoints[ profilePoints.length - 1 ][ model.X ], y2 ) 
 
-//	this.ui.setBoundingBox( new Array( x1, profilePoints[ 0 ][ model.Y ],
-//		profilePoints[ profilePoints.length - 1 ][ model.X ], y2 ), false );
-//	
-//	alert( "Calculated: " + upperLeftX + ", " + upperLeftY + " | " + lowerRightX + ", " + lowerRightY );
-//	
 	this.ui.setBoundingBox( new Array( upperLeftX, upperLeftY, 
 		lowerRightX, lowerRightY ), false );
 };

@@ -358,35 +358,25 @@ function render()
 function renderProfile()
 {
     var profileData = /*CHASM_ARRAY_UTILS.*/buildProfileArray();
-    
+
+    var initialCliff = profileData[0];
+	var horizBoundary = profileData[ profileData.length - 2];
+	var vertBoundary = profileData[ profileData.length - 1];
+	
+	$("#profileInitialCliff\\:height").val( initialCliff[ CHASM.H ] );
+	$("#profileInitialCliff\\:length").val( initialCliff[ CHASM.L ] );
+	$("#profileInitialCliff\\:angle").val( initialCliff[ CHASM.THETA ]);
+	
+	$("#profileHorizontalBoundary\\:height").val( horizBoundary[ CHASM.H ] );
+	$("#profileHorizontalBoundary\\:length").val( horizBoundary[ CHASM.L ] );
+	$("#profileHorizontalBoundary\\:angle").val( horizBoundary[ CHASM.THETA ] );
+	
+	$("#profileVerticalBoundary\\:height").val( vertBoundary[ CHASM.H ] );
+	$("#profileVerticalBoundary\\:length").val( vertBoundary[ CHASM.L ] );
+	$("#profileVerticalBoundary\\:angle").val( vertBoundary[ CHASM.THETA ] );    
+	
 	var xyPoints = CHASM.generateXYPoints( profileData );
 	
-	var slopeHeight = /*CHASM_ARRAY_UTILS.*/getSlopeSum( profileData, CHASM.H );
-	
-	var slopeWidth = xyPoints[ xyPoints.length - 1][ CHASM.X ];
-	
-	$("#profileInitialCliff\\:height").val( 0 );
-	$("#profileInitialCliff\\:length").val( Math.round( 0.15 * slopeWidth ) );
-	$("#profileInitialCliff\\:angle").val( 0 );
-	
-	$("#profileHorizontalBoundary\\:height").val( 0 );
-	$("#profileHorizontalBoundary\\:length").val( Math.round( 0.15 * slopeWidth ) );
-	$("#profileHorizontalBoundary\\:angle").val( 0 );
-	
-	$("#profileVerticalBoundary\\:height").val( Math.round( 0.25 * slopeHeight ) );
-	$("#profileVerticalBoundary\\:length").val( 0 );
-	$("#profileVerticalBoundary\\:angle").val( 90 );
-    
-	var dataRow = [ 0, Math.round( 0.15 * slopeWidth ), 0 ];
-	
-	profileData.unshift( dataRow );
-	profileData.push( dataRow );
-	
-	dataRow = [ Math.round( 0.25 * slopeHeight ), 0, 90 ];
-	
-	profileData.push( dataRow );
-	
-//    var xyPoints = /*TRANSLATE.*/generateXYPoints(profileData);
    	CHASM.setProfileData( profileData );
 }
 
@@ -516,7 +506,8 @@ $(document).ready(function(){
     GRAPH.ui = JXG.JSXGraph.initBoard('box', {boundingbox: [-5,100,150,-5], 
     	showNavigation: 1, snapToGrid: true, snapSizeX: 2, snapSizeY: 2, 
     	originX: 0, originY: 500, unitX: 150, unitY: 100, axis:true, 
-    	grid:true});
+    	// grid:true /* NEED TO DEBUG JSX GRAPH - having a grid breaks function */ 
+    	});
     CHASM.addListener( GRAPH.handleUpdate );
     
 	// add tab event handler to select tab

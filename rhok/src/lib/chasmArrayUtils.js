@@ -19,6 +19,9 @@ function buildSoilStrataArray()
 
 function buildProfileArray()
 {
+	var totalHeight = 0;
+	var totalWidth = 0;
+	
     var data = new Array(/*INDEX.*/num_profile_segments);
     for (var idx = 0; idx < /*INDEX.*/num_profile_segments; idx++)
     {
@@ -27,7 +30,23 @@ function buildProfileArray()
         row[ CHASM.L ] = parseInt($("#profile" + idx + "\\:length").val());
         row[ CHASM.THETA ] = parseInt($("#profile" + idx + "\\:angle").val());
         data[idx] = row;
+        
+        totalHeight += row[ CHASM.H ];
+        if ( row[ CHASM.THETA ] != 90 && row[ CHASM.THETA ] != -90 )
+        {
+        	totalWidth += row[ CHASM.H ] / Math.tan( TRIG.degreesToRadians( row[ CHASM.THETA ] ) );
+        }
     }
+    
+    // add virtual segments
+	var dataRow = [ 0, Math.round( 0.15 * totalWidth ), 0 ];
+	
+	data.unshift( dataRow );
+	data.push( dataRow );
+	
+	dataRow = [ Math.round( 0.25 * totalHeight ), 0, 90 ];
+	
+	data.push( dataRow );
     
     return data;
 }
