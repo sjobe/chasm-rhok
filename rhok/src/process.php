@@ -1,34 +1,12 @@
-<html>
-<head>
-	<title>Generated Geometry File</title>
-	<script>
-		var visible = false;
-		function toggleDebug() {
-			alert('Toggling debugging data');
-			if (visible) {
-				document.getElementById('data').style.display = "none";
-			} else {
-				document.getElementById('data').style.display = "block";
-			}
-			visible = !visible;
-		}
-	</script>
-</head>
-<body ondblclick="toggleDebug()">
 <?php
 	include_once "chasm.php";
 	include_once "parse.php";
-
+	include_once "fileio.php";
+	
 	if ( empty($_REQUEST) ) {		
 		$_REQUEST = Chasm_Input_Parser::debugData();
-		echo "<script>alert(\"No data supplied. Using testcase 06 data\");</script>";
 	}  
 
-	echo "<div id=\"data\" style=\"display:none\">";
-	print_r($_REQUEST);
-	echo "<hr/>";
-	echo "</div>";
-	
 	$req = $_REQUEST;
 	
 	// create a temporary directory by getting a temp file, and then 
@@ -37,21 +15,27 @@
 	unlink( $tmpName );
 	mkdir( $tmpName, "600", TRUE ); 
 	
-	$filePrefix = $tmpName . "/" 
-		. Chasm_Steering::safeFileName( 
+	$tmpDir = $tmpName . "/";
+	
+	$filePrefix =  Chasm_Steering::safeFileName( 
 			$req[ Chasm_Input_Parser::INFO ][ Chasm_Input_Parser::NAME ] );
+	
+	$files = array();
 	
 	// generate geometry file
 	$geometryFile = $filePrefix . Chasm_Steering::GEOMETRY_FILE_SUFFIX;
-	Chasm_Geometry::generateFile( $req, fopen( $geometryFile, "w" ) );
+	Chasm_Geometry::generateFile( $req, fopen( $tmpDir . $geometryFile, "w" ) );
+	array_push( $files, $geometryFile );
 	
 	// generate soils file
 	$soilsFile = $filePrefix . Chasm_Steering::SOILS_FILE_SUFFIX;
-	Chasm_Soils::generateSoilsDatabase( $req, fopen( $soilsFile, "w" ) );
+	Chasm_Soils::generateSoilsDatabase( $req, fopen( $tmpDir . $soilsFile, "w" ) );
+	array_push( $files, $soilsFile );
 	
 	// generate stability file
 	$stabilityFile = $filePrefix . Chasm_Steering::STABILITY_FILE_SUFFIX;
-	Chasm_Stability::generateStabilityFile( $req, fopen( $stabilityFile, "w" ) );
+	Chasm_Stability::generateStabilityFile( $req, fopen( $tmpDir . $stabilityFile, "w" ) );
+	array_push( $files, $stabilityFile );
 	
 	// Not generating reinforcement, vegetation, or stochastic file
 //	$reinforcementFile = $filePrefix 
@@ -73,24 +57,20 @@
 			. $rain[ Chasm_Input_Parser::RAIN_FREQUENCY ] 
 			. Chasm_Steering::BOUNDARY_FILE_SUFFIX;		
 		Chasm_Boundary_Conditions::generateBoundaryConditions( $req, $rainIdx,
-			 fopen( $boundaryFile, "w" ) );
-			
+			 fopen( $tmpDir . $boundaryFile, "w" ) );
+		array_push( $files, $boundaryFile );
+		
 		// generate steering file
 		$steeringFile = $filePrefix . Chasm_Steering::BOUNDARY_FILE_PREFIX 
 			. $rain[ Chasm_Input_Parser::RAIN_FREQUENCY ] 
 			. Chasm_Steering::STEERING_FILE_SUFFIX;
-		Chasm_Steering::generateSteering( $req, $rainIdx, fopen( $steeringFile, "w" ) );
+		Chasm_Steering::generateSteering( $req, $rainIdx, fopen( $tmpDir . $steeringFile, "w" ) );
+		array_push( $files, $steeringFile );
 	}
 	
-	echo "Generated in: " . $tmpName;
+	// need to zip files
+	$zipFile = $filePrefix . ".zip";
+	
+	Chasm_File_IO::zipFiles( $tmpDir, $files, $zipFile );
+	Chasm_File_IO::streamFile( $zipFile, $filePrefix . ".zip");
 ?>
-
-<h1>Files</h1>
-<table>
-	<tr>
-		<td>Geometry File</td>
-		<td><a href="geometry.php"></a></td>
-	</tr>
-</table>
-</body>
-</html>
