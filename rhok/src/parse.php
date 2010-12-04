@@ -128,9 +128,11 @@ class Chasm_Input_Parser
 									Chasm_Input_Parser::SOIL_C=>"40",
 									Chasm_Input_Parser::SOIL_PHI=>"50",
 									Chasm_Input_Parser::SOIL_KS=>"1e-08",
-									Chasm_Input_Parser::SOIL_DEPTH => array('', '', '', '', '', '', '', '', '')),
+//									Chasm_Input_Parser::SOIL_DEPTH => array('', '', '', '', '', '', '', '', '')
+							),
 						);
 		$data[Chasm_Input_Parser::WATER_DEPTH] = array(20, 20, 15, 8, 4, 4, 3, 3, 3);
+		$data[Chasm_Input_Parser::WATER_INITIAL_SLOPE_SUCTION] = "-0.5";
 		$data[Chasm_Input_Parser::WATER_UPSLOPE_RECHARGE] = "0";
 		
 		$data[Chasm_Input_Parser::RAIN] = 	array(
