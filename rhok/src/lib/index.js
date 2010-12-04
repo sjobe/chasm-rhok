@@ -172,7 +172,15 @@ function addSegmentRow()
     /*THIS.*/num_profile_segments++;
     /*THIS.*/updateNumProfileSegmentsDisplay();
 }
-
+function reOrderSoilTabIndexes(){
+	var totalInputs=$('input','#soil-tbody');
+	var totalRows=$('.soil-depth','#soil-tbody').length;
+	var length =totalInputs.length;
+	var rowLength = length / totalRows;
+	$('input','#soil-tbody').each(function(index,element){
+		$(this).attr('tabindex',1 + (index - index%rowLength)/rowLength) + totalRows*(index%rowLength);
+	});
+}
 function addSoilLayer()
 {
     	// add header
@@ -234,7 +242,9 @@ function addSoilLayer()
 		}
 		
 		num_strata++;
+		reOrderSoilTabIndexes();
 }
+
 
 
 function addSoilDepthRow()
@@ -271,6 +281,7 @@ function addSoilDepthRow()
 	    	}
 		}
 	}
+	reOrderSoilTabIndexes();
 }
 
 function addWaterRowHtml()
