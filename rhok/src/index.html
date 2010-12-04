@@ -88,13 +88,13 @@
               <tbody id="profile-header">
               	<tr id="profileInitialCliff">
 					<td class="height">
-						<input readonly="readonly" class="computed" id="profileInitialCliff:height" name="profile[0][height]"/>
+						<input class="computed" id="profileInitialCliff:height" name="profile[0][height]"/>
 					</td>
 					<td class="length">
-						<input readonly="readonly" class="computed" id="profileInitialCliff:length" name="profile[0][length]"/>
+						<input class="computed" id="profileInitialCliff:length" name="profile[0][length]"/>
 					</td>
 					<td class="angle">
-						<input readonly="readonly" class="computed" id="profileInitialCliff:angle" name="profile[0][angle]"/>
+						<input class="computed" id="profileInitialCliff:angle" name="profile[0][angle]"/>
 					</td>
 					<td></td>
 					<td></td>
@@ -106,26 +106,26 @@
               <tbody id="profile-footer">
               	<tr id="profileHorizontalBoundary">
 					<td class="height">
-						<input readonly="readonly" class="computed" id="profileHorizontalBoundary:height" name="profile[1][height]"/>
+						<input class="computed" id="profileHorizontalBoundary:height" name="profile[1][height]"/>
 					</td>
 					<td class="length">
-						<input readonly="readonly" class="computed" id="profileHorizontalBoundary:length" name="profile[1][length]"/>
+						<input class="computed" id="profileHorizontalBoundary:length" name="profile[1][length]"/>
 					</td>
 					<td class="angle">
-						<input readonly="readonly" class="computed" id="profileHorizontalBoundary:angle" name="profile[1][angle]"/>
+						<input class="computed" id="profileHorizontalBoundary:angle" name="profile[1][angle]"/>
 					</td>
 					<td></td>
 					<td></td>
 				</tr>
               	<tr id="profileVerticalBoundary">
 					<td class="height">
-						<input readonly="readonly" class="computed" id="profileVerticalBoundary:height" name="profile[2][height]"/>
+						<input class="computed" id="profileVerticalBoundary:height" name="profile[2][height]"/>
 					</td>
 					<td class="length">
-						<input readonly="readonly" class="computed" id="profileVerticalBoundary:length" name="profile[2][length]"/>
+						<input class="computed" id="profileVerticalBoundary:length" name="profile[2][length]"/>
 					</td>
 					<td class="angle">
-						<input readonly="readonly" class="computed" id="profileVerticalBoundary:angle" name="profile[2][angle]"/>
+						<input class="computed" id="profileVerticalBoundary:angle" name="profile[2][angle]"/>
 					</td>
 					<td></td>
 					<td></td>
@@ -191,10 +191,14 @@
                 <td><input name="soilStrata[0][ks]" id="soilStrata0:ks"/></td>
               </tr>
             </tbody>
+            <tbody id="soil-header">
+            </tbody>
             <tbody id="soil-tbody">
               <tr id="soil-depths">
                 <td class="table-title" colspan="5">Soil Depths (m)</td>
               </tr>
+            </tbody>
+            <tbody id="soil-footer">
             </tbody>
             </table>
             <a href="#" style="padding:5px 10px;" class="button" onclick="renderSoil();">Render Soil</a>
