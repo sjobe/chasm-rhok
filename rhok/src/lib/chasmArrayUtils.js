@@ -39,12 +39,12 @@ function buildProfileArray()
     }
     
     // add virtual segments
-	var dataRow = [ 0, Math.round( 0.15 * totalWidth ), 0 ];
+	var dataRow = [ 0, 0.15 * totalWidth, 0 ];
 	
 	data.unshift( dataRow );
 	data.push( dataRow );
 	
-	dataRow = [ Math.round( 0.25 * totalHeight ), 0, 90 ];
+	dataRow = [ 0.25 * totalHeight, 0, 90 ];
 	
 	data.push( dataRow );
     
