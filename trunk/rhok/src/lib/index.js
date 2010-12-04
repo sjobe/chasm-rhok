@@ -86,21 +86,6 @@ var /*THIS.*/water_row_html =
 + "</tr>"
 ;
 
-var /*THIS.*/rainfall_duration_select_html = 
-"<select id=\"rain#ID#:duration\" name=\"rain[#ID#][duration]\">"
-+ "<option value=\"\" selected=\"selected\"></option>"
-+ "<option value=\"1\">1</option>"
-+ "<option value=\"2\">2</option>"
-+ "<option value=\"3\">3</option>"
-+ "<option value=\"4\">4</option>"
-+ "<option value=\"5\">5</option>"
-+ "<option value=\"6\">6</option>"
-+ "<option value=\"10\">10</option>"
-+ "<option value=\"12\">12</option>"
-+ "<option value=\"24\">24</option>"
-+ "</select>"
-;
-
 var /*THIS.*/rain_frequency_select_html = 
 "<select id=\"rain#ID#:frequency\" name=\"rain[#ID#][frequency]\">"
 + "<option value=\"\" selected=\"selected\"></option>"
@@ -114,8 +99,24 @@ var /*THIS.*/rain_frequency_select_html =
 + "</select>"
 ;
 
+var /*THIS.*/rainfall_duration_select_html = 
+	"<select id=\"rain#ID#:duration\" name=\"rain[#ID#][duration]\">"
+	+ "<option value=\"\" selected=\"selected\"></option>"
+	+ "<option value=\"1\">1</option>"
+	+ "<option value=\"2\">2</option>"
+	+ "<option value=\"3\">3</option>"
+	+ "<option value=\"4\">4</option>"
+	+ "<option value=\"5\">5</option>"
+	+ "<option value=\"6\">6</option>"
+	+ "<option value=\"10\">10</option>"
+	+ "<option value=\"12\">12</option>"
+	+ "<option value=\"24\">24</option>"
+	+ "</select>"
+;
+
 var /*THIS.*/rainfall_row_html =
 "<tr id=\"rain#ID#\">"
++ "<td>"
 + /*THIS.*/rain_frequency_select_html
 + "</td>"
 + " <td>"
@@ -323,13 +324,12 @@ function addWaterRowHtml()
 }
 
 function addRainfallRowHtml()
-{
-	// TODO: NEED TO ACCOUNT FOR DELETION OF RAIN ROWS IN ID #s!!!
-	
+{	
     var newId = /*THIS.*/num_rain_rows++;
 	$("#rain-data").append(/*THIS.*/rainfall_row_html.replace(/#ID#/g, newId));
 	$("#rain" + newId + " .delete-rainfall-row").click(function(){
-		$(this).parent().parent().remove();
+		// TODO: NEED TO ACCOUNT FOR DELETION OF RAIN ROWS IN ID #s!!!
+		//$(this).parent().parent().remove();
 	});
 	$("#rain" + newId + " select").change(function(){
         var elem = $(this).attr("id").split(":", 1);
