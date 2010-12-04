@@ -215,13 +215,12 @@ CHASM.generateXYPoints = function( data )
 		for ( var i = 0; i < data.length; i++ )
 		{
 			xyPoints[ i + 1 ] = [
-				Math
-						.round( xyPoints[ i ][ this.X ]
+			                     xyPoints[ i ][ this.X ]
 							+ data[ i ][ this.L ]
 							* Math
 									.cos( TRIG
-											.degreesToRadians( data[ i ][ this.THETA ] ) ) ),
-				Math.round( xyPoints[ i ][ this.Y ] - data[ i ][ this.H ] ) ];
+											.degreesToRadians( data[ i ][ this.THETA ] ) ) ,
+				xyPoints[ i ][ this.Y ] - data[ i ][ this.H ]  ];
 		}
 
 		return xyPoints;
