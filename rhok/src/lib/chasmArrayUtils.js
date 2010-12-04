@@ -4,11 +4,11 @@ function buildSoilStrataArray()
     for (var strataIdx = 0; strataIdx < /*INDEX.*/num_strata; strataIdx++)
     {
         var strata = new Array();
-        for (var idx = 0; idx < /*INDEX.*/num_profile_segments + 1; idx++)
+        for (var idx = 0; idx < /*INDEX.*/num_profile_segments + 4; idx++)
         {
-            strata.push(parseInt($("#soilDepth" + idx + "\\.strata" + strataIdx + "\\:depth").val()));
+            strata.push(parseFloat($("#soilDepth" + idx + "\\.strata" + strataIdx + "\\:depth").val()));
         }
-        if ( strata.length === /*INDEX.*/num_profile_segments + 1 )
+        if ( strata.length === /*INDEX.*/num_profile_segments + 4 )
         {
             data[strataIdx] = strata;
         }
@@ -23,13 +23,13 @@ function buildProfileArray()
 	var totalWidth = 0;
 	
     var data = new Array(/*INDEX.*/num_profile_segments);
-    for (var idx = 0; idx < /*INDEX.*/num_profile_segments; idx++)
+    for (var idx = 1; idx <= /*INDEX.*/num_profile_segments; idx++)
     {
         var row = new Array(3);
-        row[ CHASM.H ] = parseInt($("#profile" + idx + "\\:height").val());
-        row[ CHASM.L ] = parseInt($("#profile" + idx + "\\:length").val());
-        row[ CHASM.THETA ] = parseInt($("#profile" + idx + "\\:angle").val());
-        data[idx] = row;
+        row[ CHASM.H ] = parseFloat($("#profile" + idx + "\\:height").val());
+        row[ CHASM.L ] = parseFloat($("#profile" + idx + "\\:length").val());
+        row[ CHASM.THETA ] = parseFloat($("#profile" + idx + "\\:angle").val());
+        data[ idx - 1 ] = row;
         
         totalHeight += row[ CHASM.H ];
         if ( row[ CHASM.THETA ] != 90 && row[ CHASM.THETA ] != -90 )
@@ -53,10 +53,10 @@ function buildProfileArray()
 
 function buildWaterArray()
 {
-    var data =  new Array(/*INDEX.*/num_profile_segments);
-    for (var idx = 0; idx < /*INDEX.*/num_profile_segments + 1; idx++)
+    var data =  new Array(/*INDEX.*/num_profile_segments + 4);
+    for (var idx = 0; idx < /*INDEX.*/num_profile_segments + 4; idx++)
     {
-        data[idx] = parseInt($("#waterDepth" + idx +"\\:depth").val());
+        data[idx] = parseFloat($("#waterDepth" + idx +"\\:depth").val());
     }
     
     return data;

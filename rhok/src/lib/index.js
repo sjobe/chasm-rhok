@@ -59,6 +59,18 @@ var /*THIS.*/soil_layer_ks_html =
 var /*THIS.*/soil_layer_depth_html =
 "<td><input name=\"soilStrata[#STRATA#][depth][]\" id=\"soilDepth#DEPTH#.strata#STRATA#:depth\"/></td>";	
 
+var /*THIS.*/soil_begin_depth_html = 
+	"<tr class=\"soil-depth\" id=\"soilDepth0\">"
+	+ "<th scope=\"row\" id=\"soilDepth0:id\">begin</th>"
+	+ "</tr>"
+	;
+
+var /*THIS.*/soil_end_depth_html = 
+	"<tr class=\"soil-depth\" id=\"soilDepth#DEPTH#\">"
+	+ "<th scope=\"row\" id=\"soilDepth#DEPTH#:id\">end</th>"
+	+ "</tr>"
+	;
+
 var /*THIS.*/soil_depth_html = 
 "<tr class=\"soil-depth\" id=\"soilDepth#DEPTH#\">"
 + "<th scope=\"row\" id=\"soilDepth#DEPTH#:id\">x#DEPTH#</th>"
@@ -67,7 +79,7 @@ var /*THIS.*/soil_depth_html =
 
 var /*THIS.*/water_row_html = 
 "<tr class=\"water-row\" id=\"waterDepth#ID#\">"
-+ "<th scope=\"row\" id=\"waterDepth#ID#:id\">x#ID#</th>"
++ "<th scope=\"row\" id=\"waterDepth#ID#:id\">#NAME#</th>"
 + "<td>"
 + "<input name=\"waterDepth[]\" id=\"waterDepth#ID#:depth\"/>"
 + "</td>"
@@ -118,20 +130,6 @@ var /*THIS.*/rainfall_row_html =
 + "</tr>"
 ;
 
-var /*THIS.*/counter=0;
-function /*THIS.*/getNextElemId() 
-{
-    var idx = /*THIS.*/counter++;
-    var elem = "";
-
-    while  ( idx - 26 > 0 ) {
-        elem += "A";
-        idx -= 26;
-    } 
-    elem = elem + String.fromCharCode( 65 + idx % 26);
-    return elem;
-}
-
 function updateNumProfileSegmentsDisplay()
 {
     $("#num-profile-segments").text(/*THIS.*/num_profile_segments);
@@ -139,12 +137,13 @@ function updateNumProfileSegmentsDisplay()
 
 function addSegmentRow()
 {
-
-    $("#profile"+(/*THIS.*/num_profile_segments -1)+"\\:delete").remove();
+	if ( num_profile_segments > 1 )
+	{
+		$("#profile"+(/*THIS.*/num_profile_segments - 1)+"\\:delete").remove();
+	}
     
-    var elem = /*THIS.*/getNextElemId();
     $("#profile-data").append(/*THIS.*/profile_segment_html.replace(/#ID#/g, 
-    	/*THIS.*/num_profile_segments));
+    	/*THIS.*/num_profile_segments + 1));
     /*THIS.*/addSoilDepthRow();
     /*THIS.*/addWaterRowHtml();    
     
@@ -159,15 +158,19 @@ function addSegmentRow()
         }
     });
     
-    $("#profile"+/*THIS.*/num_profile_segments+"\\:delete").click(function(){
+    $("#profile"+(/*THIS.*/num_profile_segments + 1 )+"\\:delete").click(function(){
         var num = parseInt($(this).attr("id").charAt($(this).attr("id").indexOf(":")-1));
         /*THIS.*/deleteSegment(num);
     });
 
-    $("#profile"+/*THIS.*/num_profile_segments+"\\:reset").click(function(){
+    $("#profile"+(/*THIS.*/num_profile_segments + 1 )+"\\:reset").click(function(){
         var num = parseInt($(this).attr("id").charAt($(this).attr("id").indexOf(":")-1));
         /*THIS.*/resetSegment(num);
     });
+    
+    $("#profileHorizontalBoundary").html( $("#profileHorizontalBoundary").html().replace( new RegExp( "profile\\[" + (num_profile_segments + 1) + "\\]","g"), "profile[" + (num_profile_segments + 2) + "]" ) );
+    
+    $("#profileVerticalBoundary").html( $("#profileVerticalBoundary").html().replace( new RegExp( "profile\\[" + (num_profile_segments + 2) + "\\]","g"), "profile[" + (num_profile_segments + 3) + "]" ) );
     
     /*THIS.*/num_profile_segments++;
     /*THIS.*/updateNumProfileSegmentsDisplay();
@@ -234,7 +237,7 @@ function addSoilLayer()
     	// add depths
 		if( /*THIS.*/num_profile_segments > 0 )
 	    {
-	    	for ( var depthIdx=0; depthIdx <= /*THIS.*/num_profile_segments; depthIdx++ )
+	    	for ( var depthIdx=0; depthIdx <= /*THIS.*/num_profile_segments + 2; depthIdx++ )
 	    	{
 	    		$("#soilDepth" + depthIdx).append(
 	    				/*THIS.*/soil_layer_depth_html.replace(/#STRATA#/g, 
@@ -252,14 +255,16 @@ function addSoilDepthRow()
 {
 	if( 0 === /*THIS.*/num_profile_segments )
     {
-		$("#soil-tbody").append(/*THIS.*/soil_depth_html.replace(/#DEPTH#/g, "0"));
+		$("#soil-tbody").append(/*THIS.*/soil_begin_depth_html);
 		$("#soil-tbody").append(/*THIS.*/soil_depth_html.replace(/#DEPTH#/g, "1"));
+		$("#soil-tbody").append(/*THIS.*/soil_depth_html.replace(/#DEPTH#/g, "2"));
+		$("#soil-tbody").append(/*THIS.*/soil_end_depth_html.replace(/#DEPTH#/g, "3"));
 		
 		if ( num_strata > 0 )
 		{
 			for ( var strataIdx = 0; strataIdx < num_strata; strataIdx++ )
-			{
-		    	for ( var segmentIdx=0; segmentIdx <= 1; segmentIdx++ )
+			{							
+		    	for ( var segmentIdx=0; segmentIdx <= 3; segmentIdx++ )
 		    	{
 		    		$("#soilDepth" + segmentIdx).append(
 		    				/*THIS.*/soil_layer_depth_html.replace(/#STRATA#/g, 
@@ -270,17 +275,26 @@ function addSoilDepthRow()
 	}
     else
     {
+    	var elem = "soilDepth" + (num_profile_segments + 2);
+    	
+    	var end = $("#soil-tbody .soil-depth:last").detach();
+    	
 		$("#soil-tbody").append(/*THIS.*/soil_depth_html.replace(/#DEPTH#/g, 
-			/*THIS.*/num_profile_segments + 1));
+			/*THIS.*/num_profile_segments + 2));
 		if ( num_strata > 0 )
 		{
-			for ( var strataIdx = 0; strataIdx < num_strata; strataIdx++ )
+			for ( var strataIdx = 0; strataIdx < num_strata ; strataIdx++ )
 			{
-	    		$("#soilDepth" + (num_profile_segments + 1)).append(
+	    		$("#soilDepth" + (num_profile_segments + 2)).append(
 	    				/*THIS.*/soil_layer_depth_html.replace(/#STRATA#/g, 
-	    						strataIdx).replace(/#DEPTH#/g, (num_profile_segments + 1)));
+	    						strataIdx).replace(/#DEPTH#/g, num_profile_segments + 2));
 	    	}
 		}
+		
+		end.attr( "id", end.attr( "id" ).replace( new RegExp(elem,"g"), "soilDepth" + (num_profile_segments + 3)) );
+		end.html( end.html().replace( new RegExp(elem,"g"), "soilDepth" + (num_profile_segments + 3 ) ) );
+		
+		$("#soil-tbody").append( end );
 	}
 	reOrderSoilTabIndexes();
 }
@@ -289,12 +303,22 @@ function addWaterRowHtml()
 {
 	if( 0 === /*THIS.*/num_profile_segments )
     {
-		$("#water-tbody").append(/*THIS.*/water_row_html.replace(/#ID#/g, "0"));
-		$("#water-tbody").append(/*THIS.*/water_row_html.replace(/#ID#/g, "1"));
+		$("#water-tbody").append(/*THIS.*/water_row_html.replace(/#ID#/g, "0").replace(/#NAME#/g, "begin"));
+		$("#water-tbody").append(/*THIS.*/water_row_html.replace(/#ID#/g, "1").replace(/#NAME#/g, "x1"));
+		$("#water-tbody").append(/*THIS.*/water_row_html.replace(/#ID#/g, "2").replace(/#NAME#/g, "x2"));
+		$("#water-tbody").append(/*THIS.*/water_row_html.replace(/#ID#/g, "3").replace(/#NAME#/g, "end"));
 	}
     else
     {
-		$("#water-tbody").append(/*THIS.*/water_row_html.replace(/#ID#/g, /*THIS.*/num_profile_segments + 1));
+    	var elem = "waterDepth" + (num_profile_segments + 2);
+    	var end = $("#water-tbody .water-row:last").detach();
+    	
+		$("#water-tbody").append(/*THIS.*/water_row_html.replace(/#ID#/g, /*THIS.*/num_profile_segments + 2).replace(/#NAME#/g, "x" + ( num_profile_segments + 2 ) ) );
+		
+		end.attr( "id", end.attr( "id" ).replace( new RegExp(elem,"g"), "waterDepth" + (num_profile_segments + 3) ) );
+		end.html( end.html().replace( new RegExp(elem,"g"), "waterDepth" + (num_profile_segments + 3 ) ) );
+		
+		$("#water-tbody").append( end );
 	}
 }
 
@@ -506,8 +530,8 @@ $(document).ready(function(){
     /*THIS.*/updateNumProfileSegmentsDisplay();
     GRAPH.ui = JXG.JSXGraph.initBoard('box', {boundingbox: [-5,100,150,-5], 
     	showNavigation: 1, snapToGrid: true, snapSizeX: 2, snapSizeY: 2, 
-    	originX: 0, originY: 500, unitX: 150, unitY: 100, axis:true, 
-    	// grid:true /* NEED TO DEBUG JSX GRAPH - having a grid breaks function */ 
+    	originX: 0, originY: 500, unitX: 150, unitY: 100, axis:true 
+    	// , grid:true /* NEED TO DEBUG JSX GRAPH - having a grid breaks function */ 
     	});
     CHASM.addListener( GRAPH.handleUpdate );
     
