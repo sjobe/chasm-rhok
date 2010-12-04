@@ -1,0 +1,12 @@
+geometry file:            test01_geom.txt
+soils database file:      test01_soil.txt
+stability file:           test01_stability.txt
+boundary conditions file: test01_tomas.txt
+#reinforcement file:      reinforcement.txt
+#stochastic parameters:   stochastic.txt
+output files: 1 1
+output variables: 1 0 0 0 0
+duration of the simulation (h): 360
+time step (s):                  60
+
+#vegetation file: veg.txt
