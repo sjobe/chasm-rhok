@@ -333,7 +333,7 @@ function validate(evt, type)
 
 function render()
 {
-    
+	
     /*THIS.*/renderProfile();
     
     /*THIS.*/renderSoil();
@@ -348,6 +348,33 @@ function renderProfile()
 {
     var profileData = /*CHASM_ARRAY_UTILS.*/buildProfileArray();
     
+	var xyPoints = CHASM.generateXYPoints( profileData );
+	
+	var slopeHeight = /*CHASM_ARRAY_UTILS.*/getSlopeSum( profileData, CHASM.H );
+	
+	var slopeWidth = xyPoints[ xyPoints.length - 1][ CHASM.X ];
+	
+	$("#profileInitialCliff\\:height").val( 0 );
+	$("#profileInitialCliff\\:length").val( Math.round( 0.15 * slopeWidth ) );
+	$("#profileInitialCliff\\:angle").val( 0 );
+	
+	$("#profileHorizontalBoundary\\:height").val( 0 );
+	$("#profileHorizontalBoundary\\:length").val( Math.round( 0.15 * slopeWidth ) );
+	$("#profileHorizontalBoundary\\:angle").val( 0 );
+	
+	$("#profileVerticalBoundary\\:height").val( Math.round( 0.25 * slopeHeight ) );
+	$("#profileVerticalBoundary\\:length").val( 0 );
+	$("#profileVerticalBoundary\\:angle").val( 90 );
+    
+	var dataRow = [ 0, Math.round( 0.15 * slopeWidth ), 0 ];
+	
+	profileData.unshift( dataRow );
+	profileData.push( dataRow );
+	
+	dataRow = [ Math.round( 0.25 * slopeHeight ), 0, 90 ];
+	
+	profileData.push( dataRow );
+	
 //    var xyPoints = /*TRANSLATE.*/generateXYPoints(profileData);
    	CHASM.setProfileData( profileData );
 }
@@ -475,7 +502,10 @@ function populateColorChoosers()
 
 $(document).ready(function(){
     /*THIS.*/updateNumProfileSegmentsDisplay();
-    GRAPH.ui = JXG.JSXGraph.initBoard('box', {boundingbox: [-5,100,150,-5], showNavigation: 1, snapToGrid: true, snapSizeX: 2, snapSizeY: 2, originX: 0, originY: 500, unitX: 150, unitY: 100, axis:true});
+    GRAPH.ui = JXG.JSXGraph.initBoard('box', {boundingbox: [-5,100,150,-5], 
+    	showNavigation: 1, snapToGrid: true, snapSizeX: 2, snapSizeY: 2, 
+    	originX: 0, originY: 500, unitX: 150, unitY: 100, axis:true, 
+    	grid:true});
     CHASM.addListener( GRAPH.handleUpdate );
     
 	// add tab event handler to select tab

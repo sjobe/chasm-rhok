@@ -23,9 +23,9 @@ function buildProfileArray()
     for (var idx = 0; idx < /*INDEX.*/num_profile_segments; idx++)
     {
         var row = new Array(3);
-        row[0] = parseInt($("#profile" + idx + "\\:height").val());
-        row[1] = parseInt($("#profile" + idx + "\\:length").val());
-        row[2] = parseInt($("#profile" + idx + "\\:angle").val());
+        row[ CHASM.H ] = parseInt($("#profile" + idx + "\\:height").val());
+        row[ CHASM.L ] = parseInt($("#profile" + idx + "\\:length").val());
+        row[ CHASM.THETA ] = parseInt($("#profile" + idx + "\\:angle").val());
         data[idx] = row;
     }
     
