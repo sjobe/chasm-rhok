@@ -526,6 +526,7 @@ function populateColorChoosers()
 	}
 }
 
+
 $(document).ready(function(){
     /*THIS.*/updateNumProfileSegmentsDisplay();
     GRAPH.ui = JXG.JSXGraph.initBoard('box', {boundingbox: [-5,100,150,-5], 
@@ -590,5 +591,4 @@ $(document).ready(function(){
 		return false;
 	});
 	
-	//populateColorChoosers()
 });
