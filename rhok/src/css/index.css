@@ -34,8 +34,11 @@ body {
   height: 50px;
   width: 126px;
   background-image: url(../img/logo.png);
+  float:left;
 }
-
+#login {
+	float:left;
+}
 .callout {
   color: #F26522;
   font-size:0.8em;
