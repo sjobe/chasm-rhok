@@ -7,7 +7,11 @@
 <script type="text/javascript" src="lib/jsxgraphcore-readable.js"></script>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script type="text/javascript" src="lib/jquery.couch.js"></script>
 <script type="text/javascript" src="lib/index.js"></script>
+<script type="text/javascript" src="lib/login.js"></script>
 <script type="text/javascript" src="lib/translate.js"></script>
 <script type="text/javascript" src="lib/chasmArrayUtils.js"></script>
 <script type="text/javascript" src="lib/soilGrade.js"></script>
@@ -19,10 +23,21 @@
 
 <title>rhok - CHASM Web UI</title>
 </head>
-<body>
+<body >
   <form id="form" action="process.php" method="post">
   <div id="page">
-    <div id="logo"></div>
+    
+    <fieldset>
+    	
+    	<div id="logo"></div>
+    	<div id="login">
+    		<div>
+    		<span><label for="infoData:user">User:</label><input id="infoData:user" name="info[user]" type="text" /></span>
+    		<span><label for="infoData:password">Password:</label><input id="infoData:password" name="info[password]" type="password"/></span>
+    		<span><input id="infoData:loginLogout" type="button" value="Login"/></span>
+    		</div>
+    	</div>
+    </fieldset>
     <div id="main-col">
       <div id="tabs">
         <a href="#" class="selected first" id="info">Info</a>
@@ -82,16 +97,14 @@
               <a href="#" style="padding:5px 10px;" class="button" onclick="render()">Refresh</a>
             </div>
             <table>
-              <thead>
+              <thead id="profile-header">
                 <tr>
                   <th scope="col">Height (m)</th>
                   <th scope="col">Length (m)</th>
                   <th scope="col">Angle (degrees)</th>
                   <th scope="col"></th>
                 </tr>
-              </thead>
-              <tbody id="profile-header">
-              	<tr id="profileInitialCliff">
+                <tr id="profileInitialCliff">
 					<td class="height">
 						<input class="computed" id="profileInitialCliff:height" name="profile[0][height]"/>
 					</td>
@@ -103,12 +116,9 @@
 					</td>
 					<td></td>
 					<td></td>
-				</tr>              
-              </tbody>
-              <tbody id="profile-data">
-              	
-              </tbody>
-              <tbody id="profile-footer">
+				</tr>       
+              </thead>
+               <tfoot id="profile-footer">
               	<tr id="profileHorizontalBoundary">
 					<td class="height">
 						<input class="computed" id="profileHorizontalBoundary:height" name="profile[1][height]"/>
@@ -135,6 +145,8 @@
 					<td></td>
 					<td></td>
 				</tr>
+              </tfoot>
+              <tbody id="profile-data">
               </tbody>
             </table>
           </div>
@@ -218,8 +230,8 @@
 
           </div>
        </div>
-
     </div>
+   
     <div id = "graph-col">
       <div id="graph">
       	<div id="box" class="jxgbox">
