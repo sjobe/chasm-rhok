@@ -3,7 +3,7 @@ var num_rain_rows = 0;
 var num_strata = 0;
 
 function initTemplates(){
-	$.template("infoDataOption","<option value='${name}'>{{if name!==''}}${name} Lat:${latitude} Long:${longitude}{{else}}Please select a local file{{/if}}</option>");
+	$.template("infoDataOption","<option data-form='${JSON.stringify(form)}' data-_id='${_id}' data-_rev='${_rev}' value='${_id},${_rev}'>{{if name!==''}}${name} Lat:${latitude} Long:${longitude}{{else}}Please select a local file{{/if}}</option>");
 	$.template("profileHeaderFooterTd",
 			'<td class="${name}">'+
 			'<input class="${$item.tdClass}" id="${$item.tdPrefix}:${name}" name="${$item.tdPrefix}[${ID}][${name}]"/>'+
@@ -623,31 +623,87 @@ function autoCompleteProfileRow( elemTag )
         angle.addClass("error");
 	}
 }
-
+function loadLocalStorage(object){
+	
+	var masterOption =$("<option class='' value=''></option>");
+	var options = masterOption.clone().attr("selected", "selected");
+	object.empty();
+	object.append(options);
+	var json = new Array();
+	if(localStorage.chasm){
+		json = JSON.parse(localStorage.chasm);	
+	}
+	for(var i = 0;i<json.length;i++){
+		if(json[i].name && json[i].name !=""){
+			$.couch.db("chasmforms").saveDoc({
+				name:json[i].name,
+				latitiude:json[i].latitude,
+				longitude:json[i].longitude
+			}, {success:function(data,text,jqXhr){
+					
+			}});
+		}else{
+			json.splice(i,1);
+		}
+	}
+	localStorage.chasm = JSON.stringify(json);
+	if(object.is(":disabled")){
+		object.removeAttr("disabled");	
+	}
+	//$(this).replaceWith(select);
+}
 $(document).ready(function(){
-	$.couch.urlPrefix= 'db'; //matches .htaccess in %apacheDir%/db/.htaccess
+	//matches .htaccess in %apacheDir%/db/.htaccess
+	//RewriteRule ^(.*)$ http://localhost:5984/$1 [P]
+	$.couch.urlPrefix= 'db'; 	
 	initTemplates();
-	//	RewriteEngine on
-	//	RewriteRule ^(.*)$ http://localhost:5984/$1 [P]
+
 	var infoFileList =$("#infoData\\:fileList");
 	var loginLogout = $("#infoData\\:loginLogout");
 	loginLogout.toggle(function(event){
-		login();
-	},function(event){
-		logout();
+		login({
+			buttonSelector:"#infoData\\:loginLogout",
+			userSelector:"#infoData\\:user",
+			passwordSelector:"#infoData\\:password",
+			containerSelector:"fieldset",
+			containerEffect:"highlight"
+		});
+		$("#infoData\\:fileList").trigger("refresh");
+		},function(event){
+		logout({
+			buttonSelector:"#infoData\\:loginLogout",
+			userSelector:"#infoData\\:user",
+			passwordSelector:"#infoData\\:password",
+			containerSelector:"fieldset",
+			containerEffect:"highlight"
+		});
 	});
+	
 	infoFileList.bind("refresh", function(event, data){
-    	var select = $(this).clone();
-    	select.empty();
-		var json =new Array();
-		
-		json.unshift({name:""});
-		$.tmpl("infoDataOption",json).appendTo(select);
-		if(json.length > 1 && select.is(":disabled")){
-			select.removeAttr("disabled");	
-		}
-		$(this).replaceWith(select);
+		var dfd = $.Deferred();
+		var select = $(this);
+		$(this).empty();
+		$.tmpl("infoDataOption", {form:{}}).appendTo(select);
+		$.couch.db("chasmforms").allDocs({
+			success:function(data){
+				for(var i=0; i < data.rows.length; i++){
+					$.couch.db("chasmforms").openDoc( data.rows[i].id, {attachPrevRev:data.rows[i].value.rev},
+							{success:function(data){
+								if(data.name && data.name!==''){
+									$.tmpl("infoDataOption", data).appendTo(select);
+									if(select.prop("disabled")){
+										select.prop("disabled", false);
+									}
+								}
+							}
+					});
+				}
+			}
+		});
+		dfd.resolve();
+		return dfd.promise();
     });
+
     updateNumProfileSegmentsDisplay();
     GRAPH.ui = JXG.JSXGraph.initBoard('box', {boundingbox: [-5,100,150,-5], 
     	showNavigation: 1, snapToGrid: true, snapSizeX: 2, snapSizeY: 2, 
@@ -660,11 +716,9 @@ $(document).ready(function(){
 
 	infoFileList.trigger("refresh");
 	infoFileList.change(function(event){
-		var fileList = $(this);
-		if(fileList.val() !== ""){
-			var data = {selectedIndex: fileList.prop("selectedIndex") - 1};
-			$("#form").trigger("build", data);
-		}
+		var option = this[this.selectedIndex];
+		//html5 converts all data-xyz attributes into a dataset on the bare htmlElement
+		var json = option.dataset.form;
 	});
 	var nameSelector = "#infoData\\:name";
 	var latSelector ="#infoData\\:latitude";
@@ -712,16 +766,22 @@ $(document).ready(function(){
 	//localStorage.chasm = '[{"name":"","latitude":"","longitude":"", "form":[]}]';
 	$("#form").submit( function(event){
 		var chasm = new Array();
-		if(localStorage.chasm){
-			chasm = JSON.parse(localStorage.chasm);
-		}
+		
 		var name = $(nameSelector).val();
 		var lat = $(latSelector).val();
 		var long = $(longSelector).val();
 		var form = $(this).serializeArray();
-		chasm.push({"name":name, "latitude":lat, "longitude":long, "form" :form});
-		localStorage.chasm = JSON.stringify(chasm);
-		infoFileList.trigger("refresh");
+		var select = infoFileList;
+		var doc ={"name":name,"latitude":lat,"longitude":long,"form":form};
+		if(select.val() !== ','){
+			var valueArray = select.val().split(",");
+			$.extend(doc, {"_id":valueArray[0],"_rev":valueArray[1]});
+		}
+		$.couch.db('chasmforms').saveDoc(doc,
+				{success:function (data){
+					$.tmpl("infoDataOption", data).appendTo(select);
+					select.prop("selectedIndex",select.find("option").length);
+		}});		
 	});
     
     // add tab event handler to select tab
