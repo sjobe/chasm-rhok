@@ -715,21 +715,44 @@ $(document).ready(function(){
 	
 
 	infoFileList.trigger("refresh");
-	infoFileList.change(function(event){
-		var option = this[this.selectedIndex];
-		//html5 converts all data-xyz attributes into a dataset on the bare htmlElement
-		var json = option.dataset.form;
-	});
 	var nameSelector = "#infoData\\:name";
 	var latSelector ="#infoData\\:latitude";
 	var longSelector="#infoData\\:longitude";
-	var nameIdRegEx=/(\w+)\[(\d+)\]\[(\w+)\]/;
+	var formSelector = "#form";
+	//some info fields
+	var nameFieldRegEx=/^(\w+)\[(\w+)\]$/;
+	//some water fields
+	var waterRegEx=/^water(\w+)/$;
+	//some soilStrata fields
+	var nameIdFieldIdRegEx=/^(\w+)\[(\d+)\]\[(\w+)\]\[(\d+)\]$/;
+	// profile, and most other fields.
+	var nameRowFieldRegEx=/^(\w+)\[(\d+)\]\[(\w+)\]$/;
+	
+//	infoFileList.change(function(event){
+//		var option = this[this.selectedIndex];
+//		//html5 converts all data-xyz attributes into a dataset on the bare htmlElement
+//		var form = JSON.parse(option.dataset.form);
+//		//some info fields
+//		var nameFieldRegEx=/^(\w+)\[(\w+)\]$/;
+//		//some water fields
+//		var waterRegEx=/^water(\w+)/$;
+//		//some soilStrata fields
+//		var nameIdFieldIdRegEx=/^(\w+)\[(\d+)\]\[(\w+)\]\[(\d+)\]$/;
+//		// profile, and most other fields.
+//		var nameRowFieldRegEx=/^(\w+)\[(\d+)\]\[(\w+)\]$/;
+//		var returnJson = {};
+//		//get the tabs initialized
+//		for(var i = 0 ; i < form.length ;i++){		
+//			if(waterRegEx.test(form[i].name)){
+//				
+//			}
+//		}
+//	});
+	
 	$("#form").bind("build", function(event,data){
 		var json = JSON.parse(localStorage.chasm)[data.selectedIndex];
 		if(json && json.form){
-			$(nameSelector).val(json.name);
-			$(latSelector).val(json.latitude);
-			$(longSelector).val(json.longitude);
+			
 			var nameValues = {};
 			var profileColumnOrder ={size:3, order:{height:0, length:1,angle:2}};
 			for(var i =0 ;i < json.form.length; i++){
