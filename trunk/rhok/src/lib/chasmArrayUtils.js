@@ -1,6 +1,8 @@
 function buildSoilStrataArray()
 {
     var data = new Array();
+    var num_strata = $(":rhok-chasm","body").chasm("getStrataCount");
+    var num_profile_segments = $(":rhok-chasm","body").chasm("getProfileSegmentsCount");
     for (var strataIdx = 0; strataIdx < /*INDEX.*/num_strata; strataIdx++)
     {
         var strata = new Array();
@@ -19,6 +21,8 @@ function buildSoilStrataArray()
 
 function buildProfileArray()
 {
+	var num_strata = $(":rhok-chasm","body").chasm("getStrataCount");
+    var num_profile_segments = $(":rhok-chasm","body").chasm("getProfileSegmentsCount");
 	var totalHeight = 0;
 	var totalWidth = 0;
 	
@@ -53,6 +57,8 @@ function buildProfileArray()
 
 function buildWaterArray()
 {
+	var num_strata = $(":rhok-chasm","body").chasm("getStrataCount");
+    var num_profile_segments = $(":rhok-chasm","body").chasm("getProfileSegmentsCount");
     var data =  new Array(/*INDEX.*/num_profile_segments + 4);
     for (var idx = 0; idx < /*INDEX.*/num_profile_segments + 4; idx++)
     {
